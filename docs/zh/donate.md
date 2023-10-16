@@ -1,11 +1,11 @@
 ---
-title: 赞助
-description: 支持Core-JS
-icon: like
-index: false
+sidebar: false
+aside: false
+outline: false
 ---
 
-`core-js` 没有公司支持，所以这个项目的未来取决于你。如果你对 `core-js` 感兴趣，请[成为赞助商或支持者](#赞助渠道)。
+`core-js` 没有公司支持，所以这个项目的未来取决于你。如果你对 `core-js` 感兴趣，
+请[成为赞助商或支持者](#赞助渠道)。
 
 ## 赞助渠道
 
@@ -15,12 +15,12 @@ index: false
 
 - Open Collective:
 
-  [![Open-collective-buttom](https://opencollective.com/core-js/donate/button@2x.png?color=blue)](https://opencollective.com/core-js/donate){ .no-ext-link-icon }
+  [![Open-collective-buttom](https://opencollective.com/core-js/donate/button@2x.png?color=blue)](https://opencollective.com/core-js/donate){
+  .no-ext-link-icon }
 
 - [Patreon](https://patreon.com/zloirock)
 - [Boosty](https://boosty.to/zloirock)
-- 加密货币(BTC):
-  `bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz`
+- 加密货币(BTC): `bc1qlea7544qtsmj2rayg0lthvza9fau63ux0fstcz`
 
 ---
 
@@ -45,4 +45,5 @@ index: false
 
 ## 支持者
 
-[![backers](https://opencollective.com/core-js/backers.svg?width=890)](https://opencollective.com/core-js#backers){ .no-ext-link-icon }
+[![backers](https://opencollective.com/core-js/backers.svg?width=890)](https://opencollective.com/core-js#backers){
+.no-ext-link-icon }

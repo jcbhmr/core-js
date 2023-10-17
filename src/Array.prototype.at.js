@@ -3,7 +3,6 @@ var ToLength = require("./lib/ToLength.js");
 var ToIntegerOrInfinity = require("./lib/ToIntegerOrInfinity.js");
 
 /**
- * @function Array.prototype.at
  * @template T
  * @this {T[]}
  * @param {number} index

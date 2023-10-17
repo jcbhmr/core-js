@@ -14,9 +14,13 @@
   "include": ["src"],
   "typedocOptions": {
     "out": "out",
-    "entryPoints": ["src/**"],
+    "entryPoints": ["src/*/shim.js"],
     "skipErrorChecking": true,
-    "plugin": ["typedoc-plugin-mdn-links"],
+    "plugin": [
+      "typedoc-plugin-mdn-links",
+      "./my-typedoc-plugin.mjs",
+      "typedoc-plugin-merge-modules",
+    ],
     "navigationLinks": {
       "Guide": "https://corejs.dev/core-js/guide/",
       "Reference": "https://corejs.dev/core-js/reference/",

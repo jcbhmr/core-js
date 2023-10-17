@@ -1,0 +1,29 @@
+name: npm test
+on:
+  push:
+    branches: "main"
+    paths-ignore:
+      - docs/**
+      - README.md
+      - LICENSE
+      - CONTRIBUTING.md
+      - CHANGELOG.md
+      - SECURITY.md
+      - .github/**
+      - "!.github/workflows/npm-test.yml"
+jobs:
+  npm-test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        node-version: ["18", "20"]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v3
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+      - run: npm ci
+      - run: npm test

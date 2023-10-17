@@ -1,5 +1,5 @@
-'use strict';
-require('../../../modules/es.array.unshift');
-var entryVirtual = require('../../../internals/entry-virtual');
+"use strict";
+require("../../../modules/es.array.unshift");
+var entryVirtual = require("../../../internals/entry-virtual");
 
-module.exports = entryVirtual('Array').unshift;
+module.exports = entryVirtual("Array").unshift;

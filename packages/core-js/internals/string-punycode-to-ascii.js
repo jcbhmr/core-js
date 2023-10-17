@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 // based on https://github.com/bestiejs/punycode.js/blob/master/punycode.js
-var uncurryThis = require('../internals/function-uncurry-this');
+var uncurryThis = require("../internals/function-uncurry-this");
 
 var maxInt = 2147483647; // aka. 0x7FFFFFFF or 2^31-1
 var base = 36;
@@ -10,22 +10,22 @@ var skew = 38;
 var damp = 700;
 var initialBias = 72;
 var initialN = 128; // 0x80
-var delimiter = '-'; // '\x2D'
+var delimiter = "-"; // '\x2D'
 var regexNonASCII = /[^\0-\u007E]/; // non-ASCII chars
 var regexSeparators = /[.\u3002\uFF0E\uFF61]/g; // RFC 3490 separators
-var OVERFLOW_ERROR = 'Overflow: input needs wider integers to process';
+var OVERFLOW_ERROR = "Overflow: input needs wider integers to process";
 var baseMinusTMin = base - tMin;
 
 var $RangeError = RangeError;
 var exec = uncurryThis(regexSeparators.exec);
 var floor = Math.floor;
 var fromCharCode = String.fromCharCode;
-var charCodeAt = uncurryThis(''.charCodeAt);
+var charCodeAt = uncurryThis("".charCodeAt);
 var join = uncurryThis([].join);
 var push = uncurryThis([].push);
-var replace = uncurryThis(''.replace);
-var split = uncurryThis(''.split);
-var toLowerCase = uncurryThis(''.toLowerCase);
+var replace = uncurryThis("".replace);
+var split = uncurryThis("".split);
+var toLowerCase = uncurryThis("".toLowerCase);
 
 /**
  * Creates an array containing the numeric code points of each Unicode
@@ -40,11 +40,12 @@ var ucs2decode = function (string) {
   var length = string.length;
   while (counter < length) {
     var value = charCodeAt(string, counter++);
-    if (value >= 0xD800 && value <= 0xDBFF && counter < length) {
+    if (value >= 0xd800 && value <= 0xdbff && counter < length) {
       // It's a high surrogate, and there is a next character.
       var extra = charCodeAt(string, counter++);
-      if ((extra & 0xFC00) === 0xDC00) { // Low surrogate.
-        push(output, ((value & 0x3FF) << 10) + (extra & 0x3FF) + 0x10000);
+      if ((extra & 0xfc00) === 0xdc00) {
+        // Low surrogate.
+        push(output, ((value & 0x3ff) << 10) + (extra & 0x3ff) + 0x10000);
       } else {
         // It's an unmatched surrogate; only append this code unit, in case the
         // next code unit is the high surrogate of a surrogate pair.
@@ -75,11 +76,11 @@ var adapt = function (delta, numPoints, firstTime) {
   var k = 0;
   delta = firstTime ? floor(delta / damp) : delta >> 1;
   delta += floor(delta / numPoints);
-  while (delta > baseMinusTMin * tMax >> 1) {
+  while (delta > (baseMinusTMin * tMax) >> 1) {
     delta = floor(delta / baseMinusTMin);
     k += base;
   }
-  return floor(k + (baseMinusTMin + 1) * delta / (delta + skew));
+  return floor(k + ((baseMinusTMin + 1) * delta) / (delta + skew));
 };
 
 /**
@@ -151,13 +152,17 @@ var encode = function (input) {
           if (q < t) break;
           var qMinusT = q - t;
           var baseMinusT = base - t;
-          push(output, fromCharCode(digitToBasic(t + qMinusT % baseMinusT)));
+          push(output, fromCharCode(digitToBasic(t + (qMinusT % baseMinusT))));
           q = floor(qMinusT / baseMinusT);
           k += base;
         }
 
         push(output, fromCharCode(digitToBasic(q)));
-        bias = adapt(delta, handledCPCountPlusOne, handledCPCount === basicLength);
+        bias = adapt(
+          delta,
+          handledCPCountPlusOne,
+          handledCPCount === basicLength,
+        );
         delta = 0;
         handledCPCount++;
       }
@@ -166,16 +171,19 @@ var encode = function (input) {
     delta++;
     n++;
   }
-  return join(output, '');
+  return join(output, "");
 };
 
 module.exports = function (input) {
   var encoded = [];
-  var labels = split(replace(toLowerCase(input), regexSeparators, '\u002E'), '.');
+  var labels = split(
+    replace(toLowerCase(input), regexSeparators, "\u002E"),
+    ".",
+  );
   var i, label;
   for (i = 0; i < labels.length; i++) {
     label = labels[i];
-    push(encoded, exec(regexNonASCII, label) ? 'xn--' + encode(label) : label);
+    push(encoded, exec(regexNonASCII, label) ? "xn--" + encode(label) : label);
   }
-  return join(encoded, '.');
+  return join(encoded, ".");
 };

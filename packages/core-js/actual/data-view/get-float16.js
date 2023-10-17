@@ -1,2 +1,2 @@
-'use strict';
-require('../../modules/esnext.data-view.get-float16');
+"use strict";
+require("../../modules/esnext.data-view.get-float16");

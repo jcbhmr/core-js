@@ -1,6 +1,6 @@
-'use strict';
-var global = require('../internals/global');
-var isObject = require('../internals/is-object');
+"use strict";
+var global = require("../internals/global");
+var isObject = require("../internals/is-object");
 
 var document = global.document;
 // typeof document.createElement is 'object' in old IE

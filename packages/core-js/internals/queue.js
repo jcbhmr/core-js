@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 var Queue = function () {
   this.head = null;
   this.tail = null;
@@ -15,11 +15,11 @@ Queue.prototype = {
   get: function () {
     var entry = this.head;
     if (entry) {
-      var next = this.head = entry.next;
+      var next = (this.head = entry.next);
       if (next === null) this.tail = null;
       return entry.item;
     }
-  }
+  },
 };
 
 module.exports = Queue;

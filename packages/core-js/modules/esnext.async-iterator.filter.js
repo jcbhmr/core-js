@@ -1,14 +1,14 @@
-'use strict';
-var $ = require('../internals/export');
-var call = require('../internals/function-call');
-var aCallable = require('../internals/a-callable');
-var anObject = require('../internals/an-object');
-var isObject = require('../internals/is-object');
-var getIteratorDirect = require('../internals/get-iterator-direct');
-var createAsyncIteratorProxy = require('../internals/async-iterator-create-proxy');
-var createIterResultObject = require('../internals/create-iter-result-object');
-var closeAsyncIteration = require('../internals/async-iterator-close');
-var IS_PURE = require('../internals/is-pure');
+"use strict";
+var $ = require("../internals/export");
+var call = require("../internals/function-call");
+var aCallable = require("../internals/a-callable");
+var anObject = require("../internals/an-object");
+var isObject = require("../internals/is-object");
+var getIteratorDirect = require("../internals/get-iterator-direct");
+var createAsyncIteratorProxy = require("../internals/async-iterator-create-proxy");
+var createIterResultObject = require("../internals/create-iter-result-object");
+var closeAsyncIteration = require("../internals/async-iterator-close");
+var IS_PURE = require("../internals/is-pure");
 
 var AsyncIteratorProxy = createAsyncIteratorProxy(function (Promise) {
   var state = this;
@@ -27,7 +27,9 @@ var AsyncIteratorProxy = createAsyncIteratorProxy(function (Promise) {
 
     var loop = function () {
       try {
-        Promise.resolve(anObject(call(state.next, iterator))).then(function (step) {
+        Promise.resolve(anObject(call(state.next, iterator))).then(function (
+          step,
+        ) {
           try {
             if (anObject(step).done) {
               state.done = true;
@@ -38,16 +40,28 @@ var AsyncIteratorProxy = createAsyncIteratorProxy(function (Promise) {
                 var result = predicate(value, state.counter++);
 
                 var handler = function (selected) {
-                  selected ? resolve(createIterResultObject(value, false)) : loop();
+                  selected
+                    ? resolve(createIterResultObject(value, false))
+                    : loop();
                 };
 
-                if (isObject(result)) Promise.resolve(result).then(handler, ifAbruptCloseAsyncIterator);
+                if (isObject(result))
+                  Promise.resolve(result).then(
+                    handler,
+                    ifAbruptCloseAsyncIterator,
+                  );
                 else handler(result);
-              } catch (error3) { ifAbruptCloseAsyncIterator(error3); }
+              } catch (error3) {
+                ifAbruptCloseAsyncIterator(error3);
+              }
             }
-          } catch (error2) { doneAndReject(error2); }
+          } catch (error2) {
+            doneAndReject(error2);
+          }
         }, doneAndReject);
-      } catch (error) { doneAndReject(error); }
+      } catch (error) {
+        doneAndReject(error);
+      }
     };
 
     loop();
@@ -56,12 +70,15 @@ var AsyncIteratorProxy = createAsyncIteratorProxy(function (Promise) {
 
 // `AsyncIterator.prototype.filter` method
 // https://github.com/tc39/proposal-async-iterator-helpers
-$({ target: 'AsyncIterator', proto: true, real: true, forced: IS_PURE }, {
-  filter: function filter(predicate) {
-    anObject(this);
-    aCallable(predicate);
-    return new AsyncIteratorProxy(getIteratorDirect(this), {
-      predicate: predicate
-    });
-  }
-});
+$(
+  { target: "AsyncIterator", proto: true, real: true, forced: IS_PURE },
+  {
+    filter: function filter(predicate) {
+      anObject(this);
+      aCallable(predicate);
+      return new AsyncIteratorProxy(getIteratorDirect(this), {
+        predicate: predicate,
+      });
+    },
+  },
+);

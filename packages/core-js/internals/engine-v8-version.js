@@ -1,15 +1,15 @@
-'use strict';
-var global = require('../internals/global');
-var userAgent = require('../internals/engine-user-agent');
+"use strict";
+var global = require("../internals/global");
+var userAgent = require("../internals/engine-user-agent");
 
 var process = global.process;
 var Deno = global.Deno;
-var versions = process && process.versions || Deno && Deno.version;
+var versions = (process && process.versions) || (Deno && Deno.version);
 var v8 = versions && versions.v8;
 var match, version;
 
 if (v8) {
-  match = v8.split('.');
+  match = v8.split(".");
   // in old Chrome, versions of V8 isn't V8 = Chrome / 10
   // but their correct versions are not interesting for us
   version = match[0] > 0 && match[0] < 4 ? 1 : +(match[0] + match[1]);

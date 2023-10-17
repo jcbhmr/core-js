@@ -1,35 +1,37 @@
-'use strict';
-var $ = require('../internals/export');
-var IS_PURE = require('../internals/is-pure');
-var IS_NODE = require('../internals/engine-is-node');
-var global = require('../internals/global');
-var call = require('../internals/function-call');
-var defineBuiltIn = require('../internals/define-built-in');
-var setPrototypeOf = require('../internals/object-set-prototype-of');
-var setToStringTag = require('../internals/set-to-string-tag');
-var setSpecies = require('../internals/set-species');
-var aCallable = require('../internals/a-callable');
-var isCallable = require('../internals/is-callable');
-var isObject = require('../internals/is-object');
-var anInstance = require('../internals/an-instance');
-var speciesConstructor = require('../internals/species-constructor');
-var task = require('../internals/task').set;
-var microtask = require('../internals/microtask');
-var hostReportErrors = require('../internals/host-report-errors');
-var perform = require('../internals/perform');
-var Queue = require('../internals/queue');
-var InternalStateModule = require('../internals/internal-state');
-var NativePromiseConstructor = require('../internals/promise-native-constructor');
-var PromiseConstructorDetection = require('../internals/promise-constructor-detection');
-var newPromiseCapabilityModule = require('../internals/new-promise-capability');
+"use strict";
+var $ = require("../internals/export");
+var IS_PURE = require("../internals/is-pure");
+var IS_NODE = require("../internals/engine-is-node");
+var global = require("../internals/global");
+var call = require("../internals/function-call");
+var defineBuiltIn = require("../internals/define-built-in");
+var setPrototypeOf = require("../internals/object-set-prototype-of");
+var setToStringTag = require("../internals/set-to-string-tag");
+var setSpecies = require("../internals/set-species");
+var aCallable = require("../internals/a-callable");
+var isCallable = require("../internals/is-callable");
+var isObject = require("../internals/is-object");
+var anInstance = require("../internals/an-instance");
+var speciesConstructor = require("../internals/species-constructor");
+var task = require("../internals/task").set;
+var microtask = require("../internals/microtask");
+var hostReportErrors = require("../internals/host-report-errors");
+var perform = require("../internals/perform");
+var Queue = require("../internals/queue");
+var InternalStateModule = require("../internals/internal-state");
+var NativePromiseConstructor = require("../internals/promise-native-constructor");
+var PromiseConstructorDetection = require("../internals/promise-constructor-detection");
+var newPromiseCapabilityModule = require("../internals/new-promise-capability");
 
-var PROMISE = 'Promise';
+var PROMISE = "Promise";
 var FORCED_PROMISE_CONSTRUCTOR = PromiseConstructorDetection.CONSTRUCTOR;
-var NATIVE_PROMISE_REJECTION_EVENT = PromiseConstructorDetection.REJECTION_EVENT;
+var NATIVE_PROMISE_REJECTION_EVENT =
+  PromiseConstructorDetection.REJECTION_EVENT;
 var NATIVE_PROMISE_SUBCLASSING = PromiseConstructorDetection.SUBCLASSING;
 var getInternalPromiseState = InternalStateModule.getterFor(PROMISE);
 var setInternalState = InternalStateModule.set;
-var NativePromisePrototype = NativePromiseConstructor && NativePromiseConstructor.prototype;
+var NativePromisePrototype =
+  NativePromiseConstructor && NativePromiseConstructor.prototype;
 var PromiseConstructor = NativePromiseConstructor;
 var PromisePrototype = NativePromisePrototype;
 var TypeError = global.TypeError;
@@ -38,9 +40,13 @@ var process = global.process;
 var newPromiseCapability = newPromiseCapabilityModule.f;
 var newGenericPromiseCapability = newPromiseCapability;
 
-var DISPATCH_EVENT = !!(document && document.createEvent && global.dispatchEvent);
-var UNHANDLED_REJECTION = 'unhandledrejection';
-var REJECTION_HANDLED = 'rejectionhandled';
+var DISPATCH_EVENT = !!(
+  document &&
+  document.createEvent &&
+  global.dispatchEvent
+);
+var UNHANDLED_REJECTION = "unhandledrejection";
+var REJECTION_HANDLED = "rejectionhandled";
 var PENDING = 0;
 var FULFILLED = 1;
 var REJECTED = 2;
@@ -52,7 +58,7 @@ var Internal, OwnPromiseCapability, PromiseWrapper, nativeThen;
 // helpers
 var isThenable = function (it) {
   var then;
-  return isObject(it) && isCallable(then = it.then) ? then : false;
+  return isObject(it) && isCallable((then = it.then)) ? then : false;
 };
 
 var callReaction = function (reaction, state) {
@@ -79,8 +85,8 @@ var callReaction = function (reaction, state) {
         }
       }
       if (result === reaction.promise) {
-        reject(new TypeError('Promise-chain cycle'));
-      } else if (then = isThenable(result)) {
+        reject(new TypeError("Promise-chain cycle"));
+      } else if ((then = isThenable(result))) {
         call(then, result, resolve, reject);
       } else resolve(result);
     } else reject(value);
@@ -96,7 +102,7 @@ var notify = function (state, isReject) {
   microtask(function () {
     var reactions = state.reactions;
     var reaction;
-    while (reaction = reactions.get()) {
+    while ((reaction = reactions.get())) {
       callReaction(reaction, state);
     }
     state.notified = false;
@@ -107,14 +113,16 @@ var notify = function (state, isReject) {
 var dispatchEvent = function (name, promise, reason) {
   var event, handler;
   if (DISPATCH_EVENT) {
-    event = document.createEvent('Event');
+    event = document.createEvent("Event");
     event.promise = promise;
     event.reason = reason;
     event.initEvent(name, false, true);
     global.dispatchEvent(event);
   } else event = { promise: promise, reason: reason };
-  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = global['on' + name])) handler(event);
-  else if (name === UNHANDLED_REJECTION) hostReportErrors('Unhandled promise rejection', reason);
+  if (!NATIVE_PROMISE_REJECTION_EVENT && (handler = global["on" + name]))
+    handler(event);
+  else if (name === UNHANDLED_REJECTION)
+    hostReportErrors("Unhandled promise rejection", reason);
 };
 
 var onUnhandled = function (state) {
@@ -126,7 +134,7 @@ var onUnhandled = function (state) {
     if (IS_UNHANDLED) {
       result = perform(function () {
         if (IS_NODE) {
-          process.emit('unhandledRejection', value, promise);
+          process.emit("unhandledRejection", value, promise);
         } else dispatchEvent(UNHANDLED_REJECTION, promise, value);
       });
       // Browsers should not trigger `rejectionHandled` event if it was handled here, NodeJS - should
@@ -144,7 +152,7 @@ var onHandleUnhandled = function (state) {
   call(task, global, function () {
     var promise = state.facade;
     if (IS_NODE) {
-      process.emit('rejectionHandled', promise);
+      process.emit("rejectionHandled", promise);
     } else dispatchEvent(REJECTION_HANDLED, promise, state.value);
   });
 };
@@ -169,15 +177,18 @@ var internalResolve = function (state, value, unwrap) {
   state.done = true;
   if (unwrap) state = unwrap;
   try {
-    if (state.facade === value) throw new TypeError("Promise can't be resolved itself");
+    if (state.facade === value)
+      throw new TypeError("Promise can't be resolved itself");
     var then = isThenable(value);
     if (then) {
       microtask(function () {
         var wrapper = { done: false };
         try {
-          call(then, value,
+          call(
+            then,
+            value,
             bind(internalResolve, wrapper, state),
-            bind(internalReject, wrapper, state)
+            bind(internalReject, wrapper, state),
           );
         } catch (error) {
           internalReject(wrapper, error, state);
@@ -220,25 +231,32 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
       reactions: new Queue(),
       rejection: false,
       state: PENDING,
-      value: undefined
+      value: undefined,
     });
   };
 
   // `Promise.prototype.then` method
   // https://tc39.es/ecma262/#sec-promise.prototype.then
-  Internal.prototype = defineBuiltIn(PromisePrototype, 'then', function then(onFulfilled, onRejected) {
-    var state = getInternalPromiseState(this);
-    var reaction = newPromiseCapability(speciesConstructor(this, PromiseConstructor));
-    state.parent = true;
-    reaction.ok = isCallable(onFulfilled) ? onFulfilled : true;
-    reaction.fail = isCallable(onRejected) && onRejected;
-    reaction.domain = IS_NODE ? process.domain : undefined;
-    if (state.state === PENDING) state.reactions.add(reaction);
-    else microtask(function () {
-      callReaction(reaction, state);
-    });
-    return reaction.promise;
-  });
+  Internal.prototype = defineBuiltIn(
+    PromisePrototype,
+    "then",
+    function then(onFulfilled, onRejected) {
+      var state = getInternalPromiseState(this);
+      var reaction = newPromiseCapability(
+        speciesConstructor(this, PromiseConstructor),
+      );
+      state.parent = true;
+      reaction.ok = isCallable(onFulfilled) ? onFulfilled : true;
+      reaction.fail = isCallable(onRejected) && onRejected;
+      reaction.domain = IS_NODE ? process.domain : undefined;
+      if (state.state === PENDING) state.reactions.add(reaction);
+      else
+        microtask(function () {
+          callReaction(reaction, state);
+        });
+      return reaction.promise;
+    },
+  );
 
   OwnPromiseCapability = function () {
     var promise = new Internal();
@@ -254,24 +272,35 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
       : newGenericPromiseCapability(C);
   };
 
-  if (!IS_PURE && isCallable(NativePromiseConstructor) && NativePromisePrototype !== Object.prototype) {
+  if (
+    !IS_PURE &&
+    isCallable(NativePromiseConstructor) &&
+    NativePromisePrototype !== Object.prototype
+  ) {
     nativeThen = NativePromisePrototype.then;
 
     if (!NATIVE_PROMISE_SUBCLASSING) {
       // make `Promise#then` return a polyfilled `Promise` for native promise-based APIs
-      defineBuiltIn(NativePromisePrototype, 'then', function then(onFulfilled, onRejected) {
-        var that = this;
-        return new PromiseConstructor(function (resolve, reject) {
-          call(nativeThen, that, resolve, reject);
-        }).then(onFulfilled, onRejected);
-      // https://github.com/zloirock/core-js/issues/640
-      }, { unsafe: true });
+      defineBuiltIn(
+        NativePromisePrototype,
+        "then",
+        function then(onFulfilled, onRejected) {
+          var that = this;
+          return new PromiseConstructor(function (resolve, reject) {
+            call(nativeThen, that, resolve, reject);
+          }).then(onFulfilled, onRejected);
+          // https://github.com/zloirock/core-js/issues/640
+        },
+        { unsafe: true },
+      );
     }
 
     // make `.constructor === Promise` work for native promise-based APIs
     try {
       delete NativePromisePrototype.constructor;
-    } catch (error) { /* empty */ }
+    } catch (error) {
+      /* empty */
+    }
 
     // make `instanceof Promise` work for native promise-based APIs
     if (setPrototypeOf) {
@@ -280,9 +309,17 @@ if (FORCED_PROMISE_CONSTRUCTOR) {
   }
 }
 
-$({ global: true, constructor: true, wrap: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
-  Promise: PromiseConstructor
-});
+$(
+  {
+    global: true,
+    constructor: true,
+    wrap: true,
+    forced: FORCED_PROMISE_CONSTRUCTOR,
+  },
+  {
+    Promise: PromiseConstructor,
+  },
+);
 
 setToStringTag(PromiseConstructor, PROMISE, false, true);
 setSpecies(PROMISE);

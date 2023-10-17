@@ -1,5 +1,5 @@
-'use strict';
-var trunc = require('../internals/math-trunc');
+"use strict";
+var trunc = require("../internals/math-trunc");
 
 // `ToIntegerOrInfinity` abstract operation
 // https://tc39.es/ecma262/#sec-tointegerorinfinity

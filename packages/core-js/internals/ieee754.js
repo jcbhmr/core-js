@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 // IEEE754 conversions based on https://github.com/feross/ieee754
 var $Array = Array;
 var abs = Math.abs;
@@ -13,7 +13,7 @@ var pack = function (number, mantissaLength, bytes) {
   var eMax = (1 << exponentLength) - 1;
   var eBias = eMax >> 1;
   var rt = mantissaLength === 23 ? pow(2, -24) - pow(2, -77) : 0;
-  var sign = number < 0 || number === 0 && 1 / number < 0 ? 1 : 0;
+  var sign = number < 0 || (number === 0 && 1 / number < 0) ? 1 : 0;
   var index = 0;
   var exponent, mantissa, c;
   number = abs(number);
@@ -54,7 +54,7 @@ var pack = function (number, mantissaLength, bytes) {
     mantissa /= 256;
     mantissaLength -= 8;
   }
-  exponent = exponent << mantissaLength | mantissa;
+  exponent = (exponent << mantissaLength) | mantissa;
   exponentLength += mantissaLength;
   while (exponentLength > 0) {
     buffer[index++] = exponent & 255;
@@ -80,7 +80,7 @@ var unpack = function (buffer, mantissaLength) {
     exponent = exponent * 256 + buffer[index--];
     nBits -= 8;
   }
-  mantissa = exponent & (1 << -nBits) - 1;
+  mantissa = exponent & ((1 << -nBits) - 1);
   exponent >>= -nBits;
   nBits += mantissaLength;
   while (nBits > 0) {
@@ -94,10 +94,11 @@ var unpack = function (buffer, mantissaLength) {
   } else {
     mantissa += pow(2, mantissaLength);
     exponent -= eBias;
-  } return (sign ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
+  }
+  return (sign ? -1 : 1) * mantissa * pow(2, exponent - mantissaLength);
 };
 
 module.exports = {
   pack: pack,
-  unpack: unpack
+  unpack: unpack,
 };

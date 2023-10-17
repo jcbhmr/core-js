@@ -1,5 +1,5 @@
-'use strict';
-var has = require('../internals/map-helpers').has;
+"use strict";
+var has = require("../internals/map-helpers").has;
 
 // Perform ? RequireInternalSlot(M, [[MapData]])
 module.exports = function (it) {

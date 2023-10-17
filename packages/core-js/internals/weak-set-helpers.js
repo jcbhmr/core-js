@@ -1,5 +1,5 @@
-'use strict';
-var uncurryThis = require('../internals/function-uncurry-this');
+"use strict";
+var uncurryThis = require("../internals/function-uncurry-this");
 
 // eslint-disable-next-line es/no-weak-set -- safe
 var WeakSetPrototype = WeakSet.prototype;
@@ -9,5 +9,5 @@ module.exports = {
   WeakSet: WeakSet,
   add: uncurryThis(WeakSetPrototype.add),
   has: uncurryThis(WeakSetPrototype.has),
-  remove: uncurryThis(WeakSetPrototype['delete'])
+  remove: uncurryThis(WeakSetPrototype["delete"]),
 };

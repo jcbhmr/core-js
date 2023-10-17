@@ -1,10 +1,10 @@
-'use strict';
-var hasOwn = require('../internals/has-own-property');
-var defineBuiltIn = require('../internals/define-built-in');
-var dateToPrimitive = require('../internals/date-to-primitive');
-var wellKnownSymbol = require('../internals/well-known-symbol');
+"use strict";
+var hasOwn = require("../internals/has-own-property");
+var defineBuiltIn = require("../internals/define-built-in");
+var dateToPrimitive = require("../internals/date-to-primitive");
+var wellKnownSymbol = require("../internals/well-known-symbol");
 
-var TO_PRIMITIVE = wellKnownSymbol('toPrimitive');
+var TO_PRIMITIVE = wellKnownSymbol("toPrimitive");
 var DatePrototype = Date.prototype;
 
 // `Date.prototype[@@toPrimitive]` method

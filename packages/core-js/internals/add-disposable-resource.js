@@ -1,29 +1,30 @@
-'use strict';
-var call = require('../internals/function-call');
-var uncurryThis = require('../internals/function-uncurry-this');
-var bind = require('../internals/function-bind-context');
-var anObject = require('../internals/an-object');
-var aCallable = require('../internals/a-callable');
-var isNullOrUndefined = require('../internals/is-null-or-undefined');
-var getMethod = require('../internals/get-method');
-var wellKnownSymbol = require('../internals/well-known-symbol');
+"use strict";
+var call = require("../internals/function-call");
+var uncurryThis = require("../internals/function-uncurry-this");
+var bind = require("../internals/function-bind-context");
+var anObject = require("../internals/an-object");
+var aCallable = require("../internals/a-callable");
+var isNullOrUndefined = require("../internals/is-null-or-undefined");
+var getMethod = require("../internals/get-method");
+var wellKnownSymbol = require("../internals/well-known-symbol");
 
-var ASYNC_DISPOSE = wellKnownSymbol('asyncDispose');
-var DISPOSE = wellKnownSymbol('dispose');
+var ASYNC_DISPOSE = wellKnownSymbol("asyncDispose");
+var DISPOSE = wellKnownSymbol("dispose");
 
 var push = uncurryThis([].push);
 
 // `GetDisposeMethod` abstract operation
 // https://tc39.es/proposal-explicit-resource-management/#sec-getdisposemethod
 var getDisposeMethod = function (V, hint) {
-  if (hint === 'async-dispose') {
+  if (hint === "async-dispose") {
     var method = getMethod(V, ASYNC_DISPOSE);
     if (method !== undefined) return method;
     method = getMethod(V, DISPOSE);
     return function () {
       call(method, this);
     };
-  } return getMethod(V, DISPOSE);
+  }
+  return getMethod(V, DISPOSE);
 };
 
 // `CreateDisposableResource` abstract operation
@@ -33,9 +34,11 @@ var createDisposableResource = function (V, hint, method) {
     method = aCallable(getDisposeMethod(anObject(V), hint));
   }
 
-  return method === undefined ? function () {
-    return undefined;
-  } : bind(method, V);
+  return method === undefined
+    ? function () {
+        return undefined;
+      }
+    : bind(method, V);
 };
 
 // `AddDisposableResource` abstract operation
@@ -45,7 +48,7 @@ module.exports = function (disposable, V, hint, method) {
   if (arguments.length < 4) {
     // When `V`` is either `null` or `undefined` and hint is `async-dispose`,
     // we record that the resource was evaluated to ensure we will still perform an `Await` when resources are later disposed.
-    if (isNullOrUndefined(V) && hint === 'sync-dispose') return;
+    if (isNullOrUndefined(V) && hint === "sync-dispose") return;
     resource = createDisposableResource(V, hint);
   } else {
     resource = createDisposableResource(undefined, hint, method);

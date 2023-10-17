@@ -1,6 +1,6 @@
 # https://vitepress.dev/
-.vitepress/cache
-.vitepress/dist
+**/.vitepress/cache
+**/.vitepress/dist
 
 # https://typedoc.org/ custom '--out' folder
 _site

@@ -1,39 +1,44 @@
-'use strict';
+"use strict";
 /* eslint-disable regexp/no-empty-capturing-group, regexp/no-empty-group, regexp/no-lazy-ends -- testing */
 /* eslint-disable regexp/no-useless-quantifier -- testing */
-var call = require('../internals/function-call');
-var uncurryThis = require('../internals/function-uncurry-this');
-var toString = require('../internals/to-string');
-var regexpFlags = require('../internals/regexp-flags');
-var stickyHelpers = require('../internals/regexp-sticky-helpers');
-var shared = require('../internals/shared');
-var create = require('../internals/object-create');
-var getInternalState = require('../internals/internal-state').get;
-var UNSUPPORTED_DOT_ALL = require('../internals/regexp-unsupported-dot-all');
-var UNSUPPORTED_NCG = require('../internals/regexp-unsupported-ncg');
+var call = require("../internals/function-call");
+var uncurryThis = require("../internals/function-uncurry-this");
+var toString = require("../internals/to-string");
+var regexpFlags = require("../internals/regexp-flags");
+var stickyHelpers = require("../internals/regexp-sticky-helpers");
+var shared = require("../internals/shared");
+var create = require("../internals/object-create");
+var getInternalState = require("../internals/internal-state").get;
+var UNSUPPORTED_DOT_ALL = require("../internals/regexp-unsupported-dot-all");
+var UNSUPPORTED_NCG = require("../internals/regexp-unsupported-ncg");
 
-var nativeReplace = shared('native-string-replace', String.prototype.replace);
+var nativeReplace = shared("native-string-replace", String.prototype.replace);
 var nativeExec = RegExp.prototype.exec;
 var patchedExec = nativeExec;
-var charAt = uncurryThis(''.charAt);
-var indexOf = uncurryThis(''.indexOf);
-var replace = uncurryThis(''.replace);
-var stringSlice = uncurryThis(''.slice);
+var charAt = uncurryThis("".charAt);
+var indexOf = uncurryThis("".indexOf);
+var replace = uncurryThis("".replace);
+var stringSlice = uncurryThis("".slice);
 
 var UPDATES_LAST_INDEX_WRONG = (function () {
   var re1 = /a/;
   var re2 = /b*/g;
-  call(nativeExec, re1, 'a');
-  call(nativeExec, re2, 'a');
+  call(nativeExec, re1, "a");
+  call(nativeExec, re2, "a");
   return re1.lastIndex !== 0 || re2.lastIndex !== 0;
 })();
 
 var UNSUPPORTED_Y = stickyHelpers.BROKEN_CARET;
 
 // nonparticipating capturing group, copied from es5-shim's String#split patch.
-var NPCG_INCLUDED = /()??/.exec('')[1] !== undefined;
+var NPCG_INCLUDED = /()??/.exec("")[1] !== undefined;
 
-var PATCH = UPDATES_LAST_INDEX_WRONG || NPCG_INCLUDED || UNSUPPORTED_Y || UNSUPPORTED_DOT_ALL || UNSUPPORTED_NCG;
+var PATCH =
+  UPDATES_LAST_INDEX_WRONG ||
+  NPCG_INCLUDED ||
+  UNSUPPORTED_Y ||
+  UNSUPPORTED_DOT_ALL ||
+  UNSUPPORTED_NCG;
 
 if (PATCH) {
   patchedExec = function exec(string) {
@@ -58,25 +63,29 @@ if (PATCH) {
     var strCopy = str;
 
     if (sticky) {
-      flags = replace(flags, 'y', '');
-      if (indexOf(flags, 'g') === -1) {
-        flags += 'g';
+      flags = replace(flags, "y", "");
+      if (indexOf(flags, "g") === -1) {
+        flags += "g";
       }
 
       strCopy = stringSlice(str, re.lastIndex);
       // Support anchored sticky behavior.
-      if (re.lastIndex > 0 && (!re.multiline || re.multiline && charAt(str, re.lastIndex - 1) !== '\n')) {
-        source = '(?: ' + source + ')';
-        strCopy = ' ' + strCopy;
+      if (
+        re.lastIndex > 0 &&
+        (!re.multiline ||
+          (re.multiline && charAt(str, re.lastIndex - 1) !== "\n"))
+      ) {
+        source = "(?: " + source + ")";
+        strCopy = " " + strCopy;
         charsAdded++;
       }
       // ^(? + rx + ) is needed, in combination with some str slicing, to
       // simulate the 'y' flag.
-      reCopy = new RegExp('^(?:' + source + ')', flags);
+      reCopy = new RegExp("^(?:" + source + ")", flags);
     }
 
     if (NPCG_INCLUDED) {
-      reCopy = new RegExp('^' + source + '$(?!\\s)', flags);
+      reCopy = new RegExp("^" + source + "$(?!\\s)", flags);
     }
     if (UPDATES_LAST_INDEX_WRONG) lastIndex = re.lastIndex;
 

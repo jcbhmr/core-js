@@ -1,8 +1,8 @@
-'use strict';
-var isCallable = require('../internals/is-callable');
-var definePropertyModule = require('../internals/object-define-property');
-var makeBuiltIn = require('../internals/make-built-in');
-var defineGlobalProperty = require('../internals/define-global-property');
+"use strict";
+var isCallable = require("../internals/is-callable");
+var definePropertyModule = require("../internals/object-define-property");
+var makeBuiltIn = require("../internals/make-built-in");
+var defineGlobalProperty = require("../internals/define-global-property");
 
 module.exports = function (O, key, value, options) {
   if (!options) options = {};
@@ -16,13 +16,17 @@ module.exports = function (O, key, value, options) {
     try {
       if (!options.unsafe) delete O[key];
       else if (O[key]) simple = true;
-    } catch (error) { /* empty */ }
+    } catch (error) {
+      /* empty */
+    }
     if (simple) O[key] = value;
-    else definePropertyModule.f(O, key, {
-      value: value,
-      enumerable: false,
-      configurable: !options.nonConfigurable,
-      writable: !options.nonWritable
-    });
-  } return O;
+    else
+      definePropertyModule.f(O, key, {
+        value: value,
+        enumerable: false,
+        configurable: !options.nonConfigurable,
+        writable: !options.nonWritable,
+      });
+  }
+  return O;
 };

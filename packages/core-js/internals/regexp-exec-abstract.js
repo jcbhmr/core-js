@@ -1,9 +1,9 @@
-'use strict';
-var call = require('../internals/function-call');
-var anObject = require('../internals/an-object');
-var isCallable = require('../internals/is-callable');
-var classof = require('../internals/classof-raw');
-var regexpExec = require('../internals/regexp-exec');
+"use strict";
+var call = require("../internals/function-call");
+var anObject = require("../internals/an-object");
+var isCallable = require("../internals/is-callable");
+var classof = require("../internals/classof-raw");
+var regexpExec = require("../internals/regexp-exec");
 
 var $TypeError = TypeError;
 
@@ -16,6 +16,6 @@ module.exports = function (R, S) {
     if (result !== null) anObject(result);
     return result;
   }
-  if (classof(R) === 'RegExp') return call(regexpExec, R, S);
-  throw new $TypeError('RegExp#exec called on incompatible receiver');
+  if (classof(R) === "RegExp") return call(regexpExec, R, S);
+  throw new $TypeError("RegExp#exec called on incompatible receiver");
 };

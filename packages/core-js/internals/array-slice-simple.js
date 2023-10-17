@@ -1,7 +1,7 @@
-'use strict';
-var toAbsoluteIndex = require('../internals/to-absolute-index');
-var lengthOfArrayLike = require('../internals/length-of-array-like');
-var createProperty = require('../internals/create-property');
+"use strict";
+var toAbsoluteIndex = require("../internals/to-absolute-index");
+var lengthOfArrayLike = require("../internals/length-of-array-like");
+var createProperty = require("../internals/create-property");
 
 var $Array = Array;
 var max = Math.max;

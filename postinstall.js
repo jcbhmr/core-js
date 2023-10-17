@@ -1,8 +1,5 @@
+#!/usr/bin/env node
 /* eslint-disable */
-/**
- * Uses ES6 features. Minimum Node.js v6.0.0+ required.
- * @file
- */
 const { readFileSync, writeFileSync, statSync } = require("fs");
 const { join } = require("path");
 const { tmpdir } = require("os");

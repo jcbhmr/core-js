@@ -1,14 +1,14 @@
-'use strict';
-var fails = require('../internals/fails');
-var isCallable = require('../internals/is-callable');
-var isObject = require('../internals/is-object');
-var create = require('../internals/object-create');
-var getPrototypeOf = require('../internals/object-get-prototype-of');
-var defineBuiltIn = require('../internals/define-built-in');
-var wellKnownSymbol = require('../internals/well-known-symbol');
-var IS_PURE = require('../internals/is-pure');
+"use strict";
+var fails = require("../internals/fails");
+var isCallable = require("../internals/is-callable");
+var isObject = require("../internals/is-object");
+var create = require("../internals/object-create");
+var getPrototypeOf = require("../internals/object-get-prototype-of");
+var defineBuiltIn = require("../internals/define-built-in");
+var wellKnownSymbol = require("../internals/well-known-symbol");
+var IS_PURE = require("../internals/is-pure");
 
-var ITERATOR = wellKnownSymbol('iterator');
+var ITERATOR = wellKnownSymbol("iterator");
 var BUGGY_SAFARI_ITERATORS = false;
 
 // `%IteratorPrototype%` object
@@ -19,18 +19,23 @@ var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 if ([].keys) {
   arrayIterator = [].keys();
   // Safari 8 has buggy iterators w/o `next`
-  if (!('next' in arrayIterator)) BUGGY_SAFARI_ITERATORS = true;
+  if (!("next" in arrayIterator)) BUGGY_SAFARI_ITERATORS = true;
   else {
-    PrototypeOfArrayIteratorPrototype = getPrototypeOf(getPrototypeOf(arrayIterator));
-    if (PrototypeOfArrayIteratorPrototype !== Object.prototype) IteratorPrototype = PrototypeOfArrayIteratorPrototype;
+    PrototypeOfArrayIteratorPrototype = getPrototypeOf(
+      getPrototypeOf(arrayIterator),
+    );
+    if (PrototypeOfArrayIteratorPrototype !== Object.prototype)
+      IteratorPrototype = PrototypeOfArrayIteratorPrototype;
   }
 }
 
-var NEW_ITERATOR_PROTOTYPE = !isObject(IteratorPrototype) || fails(function () {
-  var test = {};
-  // FF44- legacy iterators case
-  return IteratorPrototype[ITERATOR].call(test) !== test;
-});
+var NEW_ITERATOR_PROTOTYPE =
+  !isObject(IteratorPrototype) ||
+  fails(function () {
+    var test = {};
+    // FF44- legacy iterators case
+    return IteratorPrototype[ITERATOR].call(test) !== test;
+  });
 
 if (NEW_ITERATOR_PROTOTYPE) IteratorPrototype = {};
 else if (IS_PURE) IteratorPrototype = create(IteratorPrototype);
@@ -45,5 +50,5 @@ if (!isCallable(IteratorPrototype[ITERATOR])) {
 
 module.exports = {
   IteratorPrototype: IteratorPrototype,
-  BUGGY_SAFARI_ITERATORS: BUGGY_SAFARI_ITERATORS
+  BUGGY_SAFARI_ITERATORS: BUGGY_SAFARI_ITERATORS,
 };

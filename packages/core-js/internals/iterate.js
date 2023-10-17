@@ -1,14 +1,14 @@
-'use strict';
-var bind = require('../internals/function-bind-context');
-var call = require('../internals/function-call');
-var anObject = require('../internals/an-object');
-var tryToString = require('../internals/try-to-string');
-var isArrayIteratorMethod = require('../internals/is-array-iterator-method');
-var lengthOfArrayLike = require('../internals/length-of-array-like');
-var isPrototypeOf = require('../internals/object-is-prototype-of');
-var getIterator = require('../internals/get-iterator');
-var getIteratorMethod = require('../internals/get-iterator-method');
-var iteratorClose = require('../internals/iterator-close');
+"use strict";
+var bind = require("../internals/function-bind-context");
+var call = require("../internals/function-call");
+var anObject = require("../internals/an-object");
+var tryToString = require("../internals/try-to-string");
+var isArrayIteratorMethod = require("../internals/is-array-iterator-method");
+var lengthOfArrayLike = require("../internals/length-of-array-like");
+var isPrototypeOf = require("../internals/object-is-prototype-of");
+var getIterator = require("../internals/get-iterator");
+var getIteratorMethod = require("../internals/get-iterator-method");
+var iteratorClose = require("../internals/iterator-close");
 
 var $TypeError = TypeError;
 
@@ -29,15 +29,18 @@ module.exports = function (iterable, unboundFunction, options) {
   var iterator, iterFn, index, length, result, next, step;
 
   var stop = function (condition) {
-    if (iterator) iteratorClose(iterator, 'normal', condition);
+    if (iterator) iteratorClose(iterator, "normal", condition);
     return new Result(true, condition);
   };
 
   var callFn = function (value) {
     if (AS_ENTRIES) {
       anObject(value);
-      return INTERRUPTED ? fn(value[0], value[1], stop) : fn(value[0], value[1]);
-    } return INTERRUPTED ? fn(value, stop) : fn(value);
+      return INTERRUPTED
+        ? fn(value[0], value[1], stop)
+        : fn(value[0], value[1]);
+    }
+    return INTERRUPTED ? fn(value, stop) : fn(value);
   };
 
   if (IS_RECORD) {
@@ -46,13 +49,19 @@ module.exports = function (iterable, unboundFunction, options) {
     iterator = iterable;
   } else {
     iterFn = getIteratorMethod(iterable);
-    if (!iterFn) throw new $TypeError(tryToString(iterable) + ' is not iterable');
+    if (!iterFn)
+      throw new $TypeError(tryToString(iterable) + " is not iterable");
     // optimisation for array iterators
     if (isArrayIteratorMethod(iterFn)) {
-      for (index = 0, length = lengthOfArrayLike(iterable); length > index; index++) {
+      for (
+        index = 0, length = lengthOfArrayLike(iterable);
+        length > index;
+        index++
+      ) {
         result = callFn(iterable[index]);
         if (result && isPrototypeOf(ResultPrototype, result)) return result;
-      } return new Result(false);
+      }
+      return new Result(false);
     }
     iterator = getIterator(iterable, iterFn);
   }
@@ -62,8 +71,14 @@ module.exports = function (iterable, unboundFunction, options) {
     try {
       result = callFn(step.value);
     } catch (error) {
-      iteratorClose(iterator, 'throw', error);
+      iteratorClose(iterator, "throw", error);
     }
-    if (typeof result == 'object' && result && isPrototypeOf(ResultPrototype, result)) return result;
-  } return new Result(false);
+    if (
+      typeof result == "object" &&
+      result &&
+      isPrototypeOf(ResultPrototype, result)
+    )
+      return result;
+  }
+  return new Result(false);
 };

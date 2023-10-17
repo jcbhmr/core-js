@@ -1,6 +1,6 @@
-'use strict';
-var anObject = require('../internals/an-object');
-var ordinaryToPrimitive = require('../internals/ordinary-to-primitive');
+"use strict";
+var anObject = require("../internals/an-object");
+var ordinaryToPrimitive = require("../internals/ordinary-to-primitive");
 
 var $TypeError = TypeError;
 
@@ -8,7 +8,7 @@ var $TypeError = TypeError;
 // https://tc39.es/ecma262/#sec-date.prototype-@@toprimitive
 module.exports = function (hint) {
   anObject(this);
-  if (hint === 'string' || hint === 'default') hint = 'string';
-  else if (hint !== 'number') throw new $TypeError('Incorrect hint');
+  if (hint === "string" || hint === "default") hint = "string";
+  else if (hint !== "number") throw new $TypeError("Incorrect hint");
   return ordinaryToPrimitive(this, hint);
 };

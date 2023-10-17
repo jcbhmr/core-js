@@ -1,6 +1,6 @@
-'use strict';
-require('../../modules/es.object.create');
-var path = require('../../internals/path');
+"use strict";
+require("../../modules/es.object.create");
+var path = require("../../internals/path");
 
 var Object = path.Object;
 

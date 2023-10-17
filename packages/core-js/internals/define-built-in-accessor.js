@@ -1,6 +1,6 @@
-'use strict';
-var makeBuiltIn = require('../internals/make-built-in');
-var defineProperty = require('../internals/object-define-property');
+"use strict";
+var makeBuiltIn = require("../internals/make-built-in");
+var defineProperty = require("../internals/object-define-property");
 
 module.exports = function (target, name, descriptor) {
   if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });

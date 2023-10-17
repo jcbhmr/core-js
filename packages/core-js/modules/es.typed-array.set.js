@@ -1,11 +1,11 @@
-'use strict';
-var global = require('../internals/global');
-var call = require('../internals/function-call');
-var ArrayBufferViewCore = require('../internals/array-buffer-view-core');
-var lengthOfArrayLike = require('../internals/length-of-array-like');
-var toOffset = require('../internals/to-offset');
-var toIndexedObject = require('../internals/to-object');
-var fails = require('../internals/fails');
+"use strict";
+var global = require("../internals/global");
+var call = require("../internals/function-call");
+var ArrayBufferViewCore = require("../internals/array-buffer-view-core");
+var lengthOfArrayLike = require("../internals/length-of-array-like");
+var toOffset = require("../internals/to-offset");
+var toIndexedObject = require("../internals/to-object");
+var fails = require("../internals/fails");
 
 var RangeError = global.RangeError;
 var Int8Array = global.Int8Array;
@@ -22,23 +22,31 @@ var WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS = !fails(function () {
 });
 
 // https://bugs.chromium.org/p/v8/issues/detail?id=11294 and other
-var TO_OBJECT_BUG = WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS && ArrayBufferViewCore.NATIVE_ARRAY_BUFFER_VIEWS && fails(function () {
-  var array = new Int8Array(2);
-  array.set(1);
-  array.set('2', 1);
-  return array[0] !== 0 || array[1] !== 2;
-});
+var TO_OBJECT_BUG =
+  WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS &&
+  ArrayBufferViewCore.NATIVE_ARRAY_BUFFER_VIEWS &&
+  fails(function () {
+    var array = new Int8Array(2);
+    array.set(1);
+    array.set("2", 1);
+    return array[0] !== 0 || array[1] !== 2;
+  });
 
 // `%TypedArray%.prototype.set` method
 // https://tc39.es/ecma262/#sec-%typedarray%.prototype.set
-exportTypedArrayMethod('set', function set(arrayLike /* , offset */) {
-  aTypedArray(this);
-  var offset = toOffset(arguments.length > 1 ? arguments[1] : undefined, 1);
-  var src = toIndexedObject(arrayLike);
-  if (WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS) return call($set, this, src, offset);
-  var length = this.length;
-  var len = lengthOfArrayLike(src);
-  var index = 0;
-  if (len + offset > length) throw new RangeError('Wrong length');
-  while (index < len) this[offset + index] = src[index++];
-}, !WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS || TO_OBJECT_BUG);
+exportTypedArrayMethod(
+  "set",
+  function set(arrayLike /* , offset */) {
+    aTypedArray(this);
+    var offset = toOffset(arguments.length > 1 ? arguments[1] : undefined, 1);
+    var src = toIndexedObject(arrayLike);
+    if (WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS)
+      return call($set, this, src, offset);
+    var length = this.length;
+    var len = lengthOfArrayLike(src);
+    var index = 0;
+    if (len + offset > length) throw new RangeError("Wrong length");
+    while (index < len) this[offset + index] = src[index++];
+  },
+  !WORKS_WITH_OBJECTS_AND_GENERIC_ON_TYPED_ARRAYS || TO_OBJECT_BUG,
+);

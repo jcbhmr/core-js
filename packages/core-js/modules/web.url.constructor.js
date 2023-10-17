@@ -1,29 +1,29 @@
-'use strict';
+"use strict";
 // TODO: in core-js@4, move /modules/ dependencies to public entries for better optimization by tools like `preset-env`
-require('../modules/es.string.iterator');
-var $ = require('../internals/export');
-var DESCRIPTORS = require('../internals/descriptors');
-var USE_NATIVE_URL = require('../internals/url-constructor-detection');
-var global = require('../internals/global');
-var bind = require('../internals/function-bind-context');
-var uncurryThis = require('../internals/function-uncurry-this');
-var defineBuiltIn = require('../internals/define-built-in');
-var defineBuiltInAccessor = require('../internals/define-built-in-accessor');
-var anInstance = require('../internals/an-instance');
-var hasOwn = require('../internals/has-own-property');
-var assign = require('../internals/object-assign');
-var arrayFrom = require('../internals/array-from');
-var arraySlice = require('../internals/array-slice-simple');
-var codeAt = require('../internals/string-multibyte').codeAt;
-var toASCII = require('../internals/string-punycode-to-ascii');
-var $toString = require('../internals/to-string');
-var setToStringTag = require('../internals/set-to-string-tag');
-var validateArgumentsLength = require('../internals/validate-arguments-length');
-var URLSearchParamsModule = require('../modules/web.url-search-params.constructor');
-var InternalStateModule = require('../internals/internal-state');
+require("../modules/es.string.iterator");
+var $ = require("../internals/export");
+var DESCRIPTORS = require("../internals/descriptors");
+var USE_NATIVE_URL = require("../internals/url-constructor-detection");
+var global = require("../internals/global");
+var bind = require("../internals/function-bind-context");
+var uncurryThis = require("../internals/function-uncurry-this");
+var defineBuiltIn = require("../internals/define-built-in");
+var defineBuiltInAccessor = require("../internals/define-built-in-accessor");
+var anInstance = require("../internals/an-instance");
+var hasOwn = require("../internals/has-own-property");
+var assign = require("../internals/object-assign");
+var arrayFrom = require("../internals/array-from");
+var arraySlice = require("../internals/array-slice-simple");
+var codeAt = require("../internals/string-multibyte").codeAt;
+var toASCII = require("../internals/string-punycode-to-ascii");
+var $toString = require("../internals/to-string");
+var setToStringTag = require("../internals/set-to-string-tag");
+var validateArgumentsLength = require("../internals/validate-arguments-length");
+var URLSearchParamsModule = require("../modules/web.url-search-params.constructor");
+var InternalStateModule = require("../internals/internal-state");
 
 var setInternalState = InternalStateModule.set;
-var getInternalURLState = InternalStateModule.getterFor('URL');
+var getInternalURLState = InternalStateModule.getterFor("URL");
 var URLSearchParams = URLSearchParamsModule.URLSearchParams;
 var getInternalSearchParamsState = URLSearchParamsModule.getState;
 
@@ -32,23 +32,23 @@ var TypeError = global.TypeError;
 var parseInt = global.parseInt;
 var floor = Math.floor;
 var pow = Math.pow;
-var charAt = uncurryThis(''.charAt);
+var charAt = uncurryThis("".charAt);
 var exec = uncurryThis(/./.exec);
 var join = uncurryThis([].join);
-var numberToString = uncurryThis(1.0.toString);
+var numberToString = uncurryThis((1.0).toString);
 var pop = uncurryThis([].pop);
 var push = uncurryThis([].push);
-var replace = uncurryThis(''.replace);
+var replace = uncurryThis("".replace);
 var shift = uncurryThis([].shift);
-var split = uncurryThis(''.split);
-var stringSlice = uncurryThis(''.slice);
-var toLowerCase = uncurryThis(''.toLowerCase);
+var split = uncurryThis("".split);
+var stringSlice = uncurryThis("".slice);
+var toLowerCase = uncurryThis("".toLowerCase);
 var unshift = uncurryThis([].unshift);
 
-var INVALID_AUTHORITY = 'Invalid authority';
-var INVALID_SCHEME = 'Invalid scheme';
-var INVALID_HOST = 'Invalid host';
-var INVALID_PORT = 'Invalid port';
+var INVALID_AUTHORITY = "Invalid authority";
+var INVALID_SCHEME = "Invalid scheme";
+var INVALID_HOST = "Invalid host";
+var INVALID_PORT = "Invalid port";
 
 var ALPHA = /[a-z]/i;
 // eslint-disable-next-line regexp/no-obscure-range -- safe
@@ -69,9 +69,9 @@ var EOF;
 
 // https://url.spec.whatwg.org/#ipv4-number-parser
 var parseIPv4 = function (input) {
-  var parts = split(input, '.');
+  var parts = split(input, ".");
   var partsLength, numbers, index, part, radix, number, ipv4;
-  if (parts.length && parts[parts.length - 1] === '') {
+  if (parts.length && parts[parts.length - 1] === "") {
     parts.length--;
   }
   partsLength = parts.length;
@@ -79,16 +79,17 @@ var parseIPv4 = function (input) {
   numbers = [];
   for (index = 0; index < partsLength; index++) {
     part = parts[index];
-    if (part === '') return input;
+    if (part === "") return input;
     radix = 10;
-    if (part.length > 1 && charAt(part, 0) === '0') {
+    if (part.length > 1 && charAt(part, 0) === "0") {
       radix = exec(HEX_START, part) ? 16 : 8;
       part = stringSlice(part, radix === 8 ? 1 : 2);
     }
-    if (part === '') {
+    if (part === "") {
       number = 0;
     } else {
-      if (!exec(radix === 10 ? DEC : radix === 8 ? OCT : HEX, part)) return input;
+      if (!exec(radix === 10 ? DEC : radix === 8 ? OCT : HEX, part))
+        return input;
       number = parseInt(part, radix);
     }
     push(numbers, number);
@@ -119,15 +120,15 @@ var parseIPv6 = function (input) {
     return charAt(input, pointer);
   };
 
-  if (chr() === ':') {
-    if (charAt(input, 1) !== ':') return;
+  if (chr() === ":") {
+    if (charAt(input, 1) !== ":") return;
     pointer += 2;
     pieceIndex++;
     compress = pieceIndex;
   }
   while (chr()) {
     if (pieceIndex === 8) return;
-    if (chr() === ':') {
+    if (chr() === ":") {
       if (compress !== null) return;
       pointer++;
       pieceIndex++;
@@ -140,7 +141,7 @@ var parseIPv6 = function (input) {
       pointer++;
       length++;
     }
-    if (chr() === '.') {
+    if (chr() === ".") {
       if (length === 0) return;
       pointer -= length;
       if (pieceIndex > 6) return;
@@ -148,7 +149,7 @@ var parseIPv6 = function (input) {
       while (chr()) {
         ipv4Piece = null;
         if (numbersSeen > 0) {
-          if (chr() === '.' && numbersSeen < 4) pointer++;
+          if (chr() === "." && numbersSeen < 4) pointer++;
           else return;
         }
         if (!exec(DIGIT, chr())) return;
@@ -166,7 +167,7 @@ var parseIPv6 = function (input) {
       }
       if (numbersSeen !== 4) return;
       break;
-    } else if (chr() === ':') {
+    } else if (chr() === ":") {
       pointer++;
       if (!chr()) return;
     } else if (chr()) return;
@@ -214,45 +215,65 @@ var findLongestZeroSequence = function (ipv6) {
 var serializeHost = function (host) {
   var result, index, compress, ignore0;
   // ipv4
-  if (typeof host == 'number') {
+  if (typeof host == "number") {
     result = [];
     for (index = 0; index < 4; index++) {
       unshift(result, host % 256);
       host = floor(host / 256);
-    } return join(result, '.');
-  // ipv6
-  } else if (typeof host == 'object') {
-    result = '';
+    }
+    return join(result, ".");
+    // ipv6
+  } else if (typeof host == "object") {
+    result = "";
     compress = findLongestZeroSequence(host);
     for (index = 0; index < 8; index++) {
       if (ignore0 && host[index] === 0) continue;
       if (ignore0) ignore0 = false;
       if (compress === index) {
-        result += index ? ':' : '::';
+        result += index ? ":" : "::";
         ignore0 = true;
       } else {
         result += numberToString(host[index], 16);
-        if (index < 7) result += ':';
+        if (index < 7) result += ":";
       }
     }
-    return '[' + result + ']';
-  } return host;
+    return "[" + result + "]";
+  }
+  return host;
 };
 
 var C0ControlPercentEncodeSet = {};
 var fragmentPercentEncodeSet = assign({}, C0ControlPercentEncodeSet, {
-  ' ': 1, '"': 1, '<': 1, '>': 1, '`': 1
+  " ": 1,
+  '"': 1,
+  "<": 1,
+  ">": 1,
+  "`": 1,
 });
 var pathPercentEncodeSet = assign({}, fragmentPercentEncodeSet, {
-  '#': 1, '?': 1, '{': 1, '}': 1
+  "#": 1,
+  "?": 1,
+  "{": 1,
+  "}": 1,
 });
 var userinfoPercentEncodeSet = assign({}, pathPercentEncodeSet, {
-  '/': 1, ':': 1, ';': 1, '=': 1, '@': 1, '[': 1, '\\': 1, ']': 1, '^': 1, '|': 1
+  "/": 1,
+  ":": 1,
+  ";": 1,
+  "=": 1,
+  "@": 1,
+  "[": 1,
+  "\\": 1,
+  "]": 1,
+  "^": 1,
+  "|": 1,
 });
 
 var percentEncode = function (chr, set) {
   var code = codeAt(chr, 0);
-  return code > 0x20 && code < 0x7F && !hasOwn(set, chr) ? chr : encodeURIComponent(chr);
+  return code > 0x20 && code < 0x7f && !hasOwn(set, chr)
+    ? chr
+    : encodeURIComponent(chr);
 };
 
 // https://url.spec.whatwg.org/#special-scheme
@@ -262,34 +283,47 @@ var specialSchemes = {
   http: 80,
   https: 443,
   ws: 80,
-  wss: 443
+  wss: 443,
 };
 
 // https://url.spec.whatwg.org/#windows-drive-letter
 var isWindowsDriveLetter = function (string, normalized) {
   var second;
-  return string.length === 2 && exec(ALPHA, charAt(string, 0))
-    && ((second = charAt(string, 1)) === ':' || (!normalized && second === '|'));
+  return (
+    string.length === 2 &&
+    exec(ALPHA, charAt(string, 0)) &&
+    ((second = charAt(string, 1)) === ":" || (!normalized && second === "|"))
+  );
 };
 
 // https://url.spec.whatwg.org/#start-with-a-windows-drive-letter
 var startsWithWindowsDriveLetter = function (string) {
   var third;
-  return string.length > 1 && isWindowsDriveLetter(stringSlice(string, 0, 2)) && (
-    string.length === 2 ||
-    ((third = charAt(string, 2)) === '/' || third === '\\' || third === '?' || third === '#')
+  return (
+    string.length > 1 &&
+    isWindowsDriveLetter(stringSlice(string, 0, 2)) &&
+    (string.length === 2 ||
+      (third = charAt(string, 2)) === "/" ||
+      third === "\\" ||
+      third === "?" ||
+      third === "#")
   );
 };
 
 // https://url.spec.whatwg.org/#single-dot-path-segment
 var isSingleDot = function (segment) {
-  return segment === '.' || toLowerCase(segment) === '%2e';
+  return segment === "." || toLowerCase(segment) === "%2e";
 };
 
 // https://url.spec.whatwg.org/#double-dot-path-segment
 var isDoubleDot = function (segment) {
   segment = toLowerCase(segment);
-  return segment === '..' || segment === '%2e.' || segment === '.%2e' || segment === '%2e%2e';
+  return (
+    segment === ".." ||
+    segment === "%2e." ||
+    segment === ".%2e" ||
+    segment === "%2e%2e"
+  );
 };
 
 // States:
@@ -333,14 +367,14 @@ var URLState = function (url, isBase, base) {
 };
 
 URLState.prototype = {
-  type: 'URL',
+  type: "URL",
   // https://url.spec.whatwg.org/#url-parsing
   // eslint-disable-next-line max-statements -- TODO
   parse: function (input, stateOverride, base) {
     var url = this;
     var state = stateOverride || SCHEME_START;
     var pointer = 0;
-    var buffer = '';
+    var buffer = "";
     var seenAt = false;
     var seenBracket = false;
     var seenPasswordToken = false;
@@ -349,20 +383,20 @@ URLState.prototype = {
     input = $toString(input);
 
     if (!stateOverride) {
-      url.scheme = '';
-      url.username = '';
-      url.password = '';
+      url.scheme = "";
+      url.username = "";
+      url.password = "";
       url.host = null;
       url.port = null;
       url.path = [];
       url.query = null;
       url.fragment = null;
       url.cannotBeABaseURL = false;
-      input = replace(input, LEADING_C0_CONTROL_OR_SPACE, '');
-      input = replace(input, TRAILING_C0_CONTROL_OR_SPACE, '$1');
+      input = replace(input, LEADING_C0_CONTROL_OR_SPACE, "");
+      input = replace(input, TRAILING_C0_CONTROL_OR_SPACE, "$1");
     }
 
-    input = replace(input, TAB_AND_NEW_LINE, '');
+    input = replace(input, TAB_AND_NEW_LINE, "");
 
     codePoints = arrayFrom(input);
 
@@ -380,36 +414,46 @@ URLState.prototype = {
           break;
 
         case SCHEME:
-          if (chr && (exec(ALPHANUMERIC, chr) || chr === '+' || chr === '-' || chr === '.')) {
+          if (
+            chr &&
+            (exec(ALPHANUMERIC, chr) ||
+              chr === "+" ||
+              chr === "-" ||
+              chr === ".")
+          ) {
             buffer += toLowerCase(chr);
-          } else if (chr === ':') {
-            if (stateOverride && (
-              (url.isSpecial() !== hasOwn(specialSchemes, buffer)) ||
-              (buffer === 'file' && (url.includesCredentials() || url.port !== null)) ||
-              (url.scheme === 'file' && !url.host)
-            )) return;
+          } else if (chr === ":") {
+            if (
+              stateOverride &&
+              (url.isSpecial() !== hasOwn(specialSchemes, buffer) ||
+                (buffer === "file" &&
+                  (url.includesCredentials() || url.port !== null)) ||
+                (url.scheme === "file" && !url.host))
+            )
+              return;
             url.scheme = buffer;
             if (stateOverride) {
-              if (url.isSpecial() && specialSchemes[url.scheme] === url.port) url.port = null;
+              if (url.isSpecial() && specialSchemes[url.scheme] === url.port)
+                url.port = null;
               return;
             }
-            buffer = '';
-            if (url.scheme === 'file') {
+            buffer = "";
+            if (url.scheme === "file") {
               state = FILE;
             } else if (url.isSpecial() && base && base.scheme === url.scheme) {
               state = SPECIAL_RELATIVE_OR_AUTHORITY;
             } else if (url.isSpecial()) {
               state = SPECIAL_AUTHORITY_SLASHES;
-            } else if (codePoints[pointer + 1] === '/') {
+            } else if (codePoints[pointer + 1] === "/") {
               state = PATH_OR_AUTHORITY;
               pointer++;
             } else {
               url.cannotBeABaseURL = true;
-              push(url.path, '');
+              push(url.path, "");
               state = CANNOT_BE_A_BASE_URL_PATH;
             }
           } else if (!stateOverride) {
-            buffer = '';
+            buffer = "";
             state = NO_SCHEME;
             pointer = 0;
             continue;
@@ -417,30 +461,32 @@ URLState.prototype = {
           break;
 
         case NO_SCHEME:
-          if (!base || (base.cannotBeABaseURL && chr !== '#')) return INVALID_SCHEME;
-          if (base.cannotBeABaseURL && chr === '#') {
+          if (!base || (base.cannotBeABaseURL && chr !== "#"))
+            return INVALID_SCHEME;
+          if (base.cannotBeABaseURL && chr === "#") {
             url.scheme = base.scheme;
             url.path = arraySlice(base.path);
             url.query = base.query;
-            url.fragment = '';
+            url.fragment = "";
             url.cannotBeABaseURL = true;
             state = FRAGMENT;
             break;
           }
-          state = base.scheme === 'file' ? FILE : RELATIVE;
+          state = base.scheme === "file" ? FILE : RELATIVE;
           continue;
 
         case SPECIAL_RELATIVE_OR_AUTHORITY:
-          if (chr === '/' && codePoints[pointer + 1] === '/') {
+          if (chr === "/" && codePoints[pointer + 1] === "/") {
             state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
             pointer++;
           } else {
             state = RELATIVE;
             continue;
-          } break;
+          }
+          break;
 
         case PATH_OR_AUTHORITY:
-          if (chr === '/') {
+          if (chr === "/") {
             state = AUTHORITY;
             break;
           } else {
@@ -457,24 +503,24 @@ URLState.prototype = {
             url.port = base.port;
             url.path = arraySlice(base.path);
             url.query = base.query;
-          } else if (chr === '/' || (chr === '\\' && url.isSpecial())) {
+          } else if (chr === "/" || (chr === "\\" && url.isSpecial())) {
             state = RELATIVE_SLASH;
-          } else if (chr === '?') {
+          } else if (chr === "?") {
             url.username = base.username;
             url.password = base.password;
             url.host = base.host;
             url.port = base.port;
             url.path = arraySlice(base.path);
-            url.query = '';
+            url.query = "";
             state = QUERY;
-          } else if (chr === '#') {
+          } else if (chr === "#") {
             url.username = base.username;
             url.password = base.password;
             url.host = base.host;
             url.port = base.port;
             url.path = arraySlice(base.path);
             url.query = base.query;
-            url.fragment = '';
+            url.fragment = "";
             state = FRAGMENT;
           } else {
             url.username = base.username;
@@ -485,12 +531,13 @@ URLState.prototype = {
             url.path.length--;
             state = PATH;
             continue;
-          } break;
+          }
+          break;
 
         case RELATIVE_SLASH:
-          if (url.isSpecial() && (chr === '/' || chr === '\\')) {
+          if (url.isSpecial() && (chr === "/" || chr === "\\")) {
             state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
-          } else if (chr === '/') {
+          } else if (chr === "/") {
             state = AUTHORITY;
           } else {
             url.username = base.username;
@@ -499,90 +546,113 @@ URLState.prototype = {
             url.port = base.port;
             state = PATH;
             continue;
-          } break;
+          }
+          break;
 
         case SPECIAL_AUTHORITY_SLASHES:
           state = SPECIAL_AUTHORITY_IGNORE_SLASHES;
-          if (chr !== '/' || charAt(buffer, pointer + 1) !== '/') continue;
+          if (chr !== "/" || charAt(buffer, pointer + 1) !== "/") continue;
           pointer++;
           break;
 
         case SPECIAL_AUTHORITY_IGNORE_SLASHES:
-          if (chr !== '/' && chr !== '\\') {
+          if (chr !== "/" && chr !== "\\") {
             state = AUTHORITY;
             continue;
-          } break;
+          }
+          break;
 
         case AUTHORITY:
-          if (chr === '@') {
-            if (seenAt) buffer = '%40' + buffer;
+          if (chr === "@") {
+            if (seenAt) buffer = "%40" + buffer;
             seenAt = true;
             bufferCodePoints = arrayFrom(buffer);
             for (var i = 0; i < bufferCodePoints.length; i++) {
               var codePoint = bufferCodePoints[i];
-              if (codePoint === ':' && !seenPasswordToken) {
+              if (codePoint === ":" && !seenPasswordToken) {
                 seenPasswordToken = true;
                 continue;
               }
-              var encodedCodePoints = percentEncode(codePoint, userinfoPercentEncodeSet);
+              var encodedCodePoints = percentEncode(
+                codePoint,
+                userinfoPercentEncodeSet,
+              );
               if (seenPasswordToken) url.password += encodedCodePoints;
               else url.username += encodedCodePoints;
             }
-            buffer = '';
+            buffer = "";
           } else if (
-            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
-            (chr === '\\' && url.isSpecial())
+            chr === EOF ||
+            chr === "/" ||
+            chr === "?" ||
+            chr === "#" ||
+            (chr === "\\" && url.isSpecial())
           ) {
-            if (seenAt && buffer === '') return INVALID_AUTHORITY;
+            if (seenAt && buffer === "") return INVALID_AUTHORITY;
             pointer -= arrayFrom(buffer).length + 1;
-            buffer = '';
+            buffer = "";
             state = HOST;
           } else buffer += chr;
           break;
 
         case HOST:
         case HOSTNAME:
-          if (stateOverride && url.scheme === 'file') {
+          if (stateOverride && url.scheme === "file") {
             state = FILE_HOST;
             continue;
-          } else if (chr === ':' && !seenBracket) {
-            if (buffer === '') return INVALID_HOST;
+          } else if (chr === ":" && !seenBracket) {
+            if (buffer === "") return INVALID_HOST;
             failure = url.parseHost(buffer);
             if (failure) return failure;
-            buffer = '';
+            buffer = "";
             state = PORT;
             if (stateOverride === HOSTNAME) return;
           } else if (
-            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
-            (chr === '\\' && url.isSpecial())
+            chr === EOF ||
+            chr === "/" ||
+            chr === "?" ||
+            chr === "#" ||
+            (chr === "\\" && url.isSpecial())
           ) {
-            if (url.isSpecial() && buffer === '') return INVALID_HOST;
-            if (stateOverride && buffer === '' && (url.includesCredentials() || url.port !== null)) return;
+            if (url.isSpecial() && buffer === "") return INVALID_HOST;
+            if (
+              stateOverride &&
+              buffer === "" &&
+              (url.includesCredentials() || url.port !== null)
+            )
+              return;
             failure = url.parseHost(buffer);
             if (failure) return failure;
-            buffer = '';
+            buffer = "";
             state = PATH_START;
             if (stateOverride) return;
             continue;
           } else {
-            if (chr === '[') seenBracket = true;
-            else if (chr === ']') seenBracket = false;
+            if (chr === "[") seenBracket = true;
+            else if (chr === "]") seenBracket = false;
             buffer += chr;
-          } break;
+          }
+          break;
 
         case PORT:
           if (exec(DIGIT, chr)) {
             buffer += chr;
           } else if (
-            chr === EOF || chr === '/' || chr === '?' || chr === '#' ||
-            (chr === '\\' && url.isSpecial()) ||
+            chr === EOF ||
+            chr === "/" ||
+            chr === "?" ||
+            chr === "#" ||
+            (chr === "\\" && url.isSpecial()) ||
             stateOverride
           ) {
-            if (buffer !== '') {
+            if (buffer !== "") {
               var port = parseInt(buffer, 10);
-              if (port > 0xFFFF) return INVALID_PORT;
-              url.port = (url.isSpecial() && port === specialSchemes[url.scheme]) ? null : port;
-              buffer = '';
+              if (port > 0xffff) return INVALID_PORT;
+              url.port =
+                url.isSpecial() && port === specialSchemes[url.scheme]
+                  ? null
+                  : port;
+              buffer = "";
             }
             if (stateOverride) return;
             state = PATH_START;
@@ -591,30 +661,34 @@ URLState.prototype = {
           break;
 
         case FILE:
-          url.scheme = 'file';
-          if (chr === '/' || chr === '\\') state = FILE_SLASH;
-          else if (base && base.scheme === 'file') {
+          url.scheme = "file";
+          if (chr === "/" || chr === "\\") state = FILE_SLASH;
+          else if (base && base.scheme === "file") {
             switch (chr) {
               case EOF:
                 url.host = base.host;
                 url.path = arraySlice(base.path);
                 url.query = base.query;
                 break;
-              case '?':
+              case "?":
                 url.host = base.host;
                 url.path = arraySlice(base.path);
-                url.query = '';
+                url.query = "";
                 state = QUERY;
                 break;
-              case '#':
+              case "#":
                 url.host = base.host;
                 url.path = arraySlice(base.path);
                 url.query = base.query;
-                url.fragment = '';
+                url.fragment = "";
                 state = FRAGMENT;
                 break;
               default:
-                if (!startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
+                if (
+                  !startsWithWindowsDriveLetter(
+                    join(arraySlice(codePoints, pointer), ""),
+                  )
+                ) {
                   url.host = base.host;
                   url.path = arraySlice(base.path);
                   url.shortenPath();
@@ -625,116 +699,144 @@ URLState.prototype = {
           } else {
             state = PATH;
             continue;
-          } break;
+          }
+          break;
 
         case FILE_SLASH:
-          if (chr === '/' || chr === '\\') {
+          if (chr === "/" || chr === "\\") {
             state = FILE_HOST;
             break;
           }
-          if (base && base.scheme === 'file' && !startsWithWindowsDriveLetter(join(arraySlice(codePoints, pointer), ''))) {
-            if (isWindowsDriveLetter(base.path[0], true)) push(url.path, base.path[0]);
+          if (
+            base &&
+            base.scheme === "file" &&
+            !startsWithWindowsDriveLetter(
+              join(arraySlice(codePoints, pointer), ""),
+            )
+          ) {
+            if (isWindowsDriveLetter(base.path[0], true))
+              push(url.path, base.path[0]);
             else url.host = base.host;
           }
           state = PATH;
           continue;
 
         case FILE_HOST:
-          if (chr === EOF || chr === '/' || chr === '\\' || chr === '?' || chr === '#') {
+          if (
+            chr === EOF ||
+            chr === "/" ||
+            chr === "\\" ||
+            chr === "?" ||
+            chr === "#"
+          ) {
             if (!stateOverride && isWindowsDriveLetter(buffer)) {
               state = PATH;
-            } else if (buffer === '') {
-              url.host = '';
+            } else if (buffer === "") {
+              url.host = "";
               if (stateOverride) return;
               state = PATH_START;
             } else {
               failure = url.parseHost(buffer);
               if (failure) return failure;
-              if (url.host === 'localhost') url.host = '';
+              if (url.host === "localhost") url.host = "";
               if (stateOverride) return;
-              buffer = '';
+              buffer = "";
               state = PATH_START;
-            } continue;
+            }
+            continue;
           } else buffer += chr;
           break;
 
         case PATH_START:
           if (url.isSpecial()) {
             state = PATH;
-            if (chr !== '/' && chr !== '\\') continue;
-          } else if (!stateOverride && chr === '?') {
-            url.query = '';
+            if (chr !== "/" && chr !== "\\") continue;
+          } else if (!stateOverride && chr === "?") {
+            url.query = "";
             state = QUERY;
-          } else if (!stateOverride && chr === '#') {
-            url.fragment = '';
+          } else if (!stateOverride && chr === "#") {
+            url.fragment = "";
             state = FRAGMENT;
           } else if (chr !== EOF) {
             state = PATH;
-            if (chr !== '/') continue;
-          } break;
+            if (chr !== "/") continue;
+          }
+          break;
 
         case PATH:
           if (
-            chr === EOF || chr === '/' ||
-            (chr === '\\' && url.isSpecial()) ||
-            (!stateOverride && (chr === '?' || chr === '#'))
+            chr === EOF ||
+            chr === "/" ||
+            (chr === "\\" && url.isSpecial()) ||
+            (!stateOverride && (chr === "?" || chr === "#"))
           ) {
             if (isDoubleDot(buffer)) {
               url.shortenPath();
-              if (chr !== '/' && !(chr === '\\' && url.isSpecial())) {
-                push(url.path, '');
+              if (chr !== "/" && !(chr === "\\" && url.isSpecial())) {
+                push(url.path, "");
               }
             } else if (isSingleDot(buffer)) {
-              if (chr !== '/' && !(chr === '\\' && url.isSpecial())) {
-                push(url.path, '');
+              if (chr !== "/" && !(chr === "\\" && url.isSpecial())) {
+                push(url.path, "");
               }
             } else {
-              if (url.scheme === 'file' && !url.path.length && isWindowsDriveLetter(buffer)) {
-                if (url.host) url.host = '';
-                buffer = charAt(buffer, 0) + ':'; // normalize windows drive letter
+              if (
+                url.scheme === "file" &&
+                !url.path.length &&
+                isWindowsDriveLetter(buffer)
+              ) {
+                if (url.host) url.host = "";
+                buffer = charAt(buffer, 0) + ":"; // normalize windows drive letter
               }
               push(url.path, buffer);
             }
-            buffer = '';
-            if (url.scheme === 'file' && (chr === EOF || chr === '?' || chr === '#')) {
-              while (url.path.length > 1 && url.path[0] === '') {
+            buffer = "";
+            if (
+              url.scheme === "file" &&
+              (chr === EOF || chr === "?" || chr === "#")
+            ) {
+              while (url.path.length > 1 && url.path[0] === "") {
                 shift(url.path);
               }
             }
-            if (chr === '?') {
-              url.query = '';
+            if (chr === "?") {
+              url.query = "";
               state = QUERY;
-            } else if (chr === '#') {
-              url.fragment = '';
+            } else if (chr === "#") {
+              url.fragment = "";
               state = FRAGMENT;
             }
           } else {
             buffer += percentEncode(chr, pathPercentEncodeSet);
-          } break;
+          }
+          break;
 
         case CANNOT_BE_A_BASE_URL_PATH:
-          if (chr === '?') {
-            url.query = '';
+          if (chr === "?") {
+            url.query = "";
             state = QUERY;
-          } else if (chr === '#') {
-            url.fragment = '';
+          } else if (chr === "#") {
+            url.fragment = "";
             state = FRAGMENT;
           } else if (chr !== EOF) {
             url.path[0] += percentEncode(chr, C0ControlPercentEncodeSet);
-          } break;
+          }
+          break;
 
         case QUERY:
-          if (!stateOverride && chr === '#') {
-            url.fragment = '';
+          if (!stateOverride && chr === "#") {
+            url.fragment = "";
             state = FRAGMENT;
           } else if (chr !== EOF) {
-            if (chr === "'" && url.isSpecial()) url.query += '%27';
-            else if (chr === '#') url.query += '%23';
+            if (chr === "'" && url.isSpecial()) url.query += "%27";
+            else if (chr === "#") url.query += "%23";
             else url.query += percentEncode(chr, C0ControlPercentEncodeSet);
-          } break;
+          }
+          break;
 
         case FRAGMENT:
-          if (chr !== EOF) url.fragment += percentEncode(chr, fragmentPercentEncodeSet);
+          if (chr !== EOF)
+            url.fragment += percentEncode(chr, fragmentPercentEncodeSet);
           break;
       }
 
@@ -744,15 +846,16 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#host-parsing
   parseHost: function (input) {
     var result, codePoints, index;
-    if (charAt(input, 0) === '[') {
-      if (charAt(input, input.length - 1) !== ']') return INVALID_HOST;
+    if (charAt(input, 0) === "[") {
+      if (charAt(input, input.length - 1) !== "]") return INVALID_HOST;
       result = parseIPv6(stringSlice(input, 1, -1));
       if (!result) return INVALID_HOST;
       this.host = result;
-    // opaque host
+      // opaque host
     } else if (!this.isSpecial()) {
-      if (exec(FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT, input)) return INVALID_HOST;
-      result = '';
+      if (exec(FORBIDDEN_HOST_CODE_POINT_EXCLUDING_PERCENT, input))
+        return INVALID_HOST;
+      result = "";
       codePoints = arrayFrom(input);
       for (index = 0; index < codePoints.length; index++) {
         result += percentEncode(codePoints[index], C0ControlPercentEncodeSet);
@@ -768,11 +871,11 @@ URLState.prototype = {
   },
   // https://url.spec.whatwg.org/#cannot-have-a-username-password-port
   cannotHaveUsernamePasswordPort: function () {
-    return !this.host || this.cannotBeABaseURL || this.scheme === 'file';
+    return !this.host || this.cannotBeABaseURL || this.scheme === "file";
   },
   // https://url.spec.whatwg.org/#include-credentials
   includesCredentials: function () {
-    return this.username !== '' || this.password !== '';
+    return this.username !== "" || this.password !== "";
   },
   // https://url.spec.whatwg.org/#is-special
   isSpecial: function () {
@@ -782,7 +885,12 @@ URLState.prototype = {
   shortenPath: function () {
     var path = this.path;
     var pathSize = path.length;
-    if (pathSize && (this.scheme !== 'file' || pathSize !== 1 || !isWindowsDriveLetter(path[0], true))) {
+    if (
+      pathSize &&
+      (this.scheme !== "file" ||
+        pathSize !== 1 ||
+        !isWindowsDriveLetter(path[0], true))
+    ) {
       path.length--;
     }
   },
@@ -797,18 +905,22 @@ URLState.prototype = {
     var path = url.path;
     var query = url.query;
     var fragment = url.fragment;
-    var output = scheme + ':';
+    var output = scheme + ":";
     if (host !== null) {
-      output += '//';
+      output += "//";
       if (url.includesCredentials()) {
-        output += username + (password ? ':' + password : '') + '@';
+        output += username + (password ? ":" + password : "") + "@";
       }
       output += serializeHost(host);
-      if (port !== null) output += ':' + port;
-    } else if (scheme === 'file') output += '//';
-    output += url.cannotBeABaseURL ? path[0] : path.length ? '/' + join(path, '/') : '';
-    if (query !== null) output += '?' + query;
-    if (fragment !== null) output += '#' + fragment;
+      if (port !== null) output += ":" + port;
+    } else if (scheme === "file") output += "//";
+    output += url.cannotBeABaseURL
+      ? path[0]
+      : path.length
+      ? "/" + join(path, "/")
+      : "";
+    if (query !== null) output += "?" + query;
+    if (fragment !== null) output += "#" + fragment;
     return output;
   },
   // https://url.spec.whatwg.org/#dom-url-href
@@ -821,20 +933,26 @@ URLState.prototype = {
   getOrigin: function () {
     var scheme = this.scheme;
     var port = this.port;
-    if (scheme === 'blob') try {
-      return new URLConstructor(scheme.path[0]).origin;
-    } catch (error) {
-      return 'null';
-    }
-    if (scheme === 'file' || !this.isSpecial()) return 'null';
-    return scheme + '://' + serializeHost(this.host) + (port !== null ? ':' + port : '');
+    if (scheme === "blob")
+      try {
+        return new URLConstructor(scheme.path[0]).origin;
+      } catch (error) {
+        return "null";
+      }
+    if (scheme === "file" || !this.isSpecial()) return "null";
+    return (
+      scheme +
+      "://" +
+      serializeHost(this.host) +
+      (port !== null ? ":" + port : "")
+    );
   },
   // https://url.spec.whatwg.org/#dom-url-protocol
   getProtocol: function () {
-    return this.scheme + ':';
+    return this.scheme + ":";
   },
   setProtocol: function (protocol) {
-    this.parse($toString(protocol) + ':', SCHEME_START);
+    this.parse($toString(protocol) + ":", SCHEME_START);
   },
   // https://url.spec.whatwg.org/#dom-url-username
   getUsername: function () {
@@ -843,7 +961,7 @@ URLState.prototype = {
   setUsername: function (username) {
     var codePoints = arrayFrom($toString(username));
     if (this.cannotHaveUsernamePasswordPort()) return;
-    this.username = '';
+    this.username = "";
     for (var i = 0; i < codePoints.length; i++) {
       this.username += percentEncode(codePoints[i], userinfoPercentEncodeSet);
     }
@@ -855,7 +973,7 @@ URLState.prototype = {
   setPassword: function (password) {
     var codePoints = arrayFrom($toString(password));
     if (this.cannotHaveUsernamePasswordPort()) return;
-    this.password = '';
+    this.password = "";
     for (var i = 0; i < codePoints.length; i++) {
       this.password += percentEncode(codePoints[i], userinfoPercentEncodeSet);
     }
@@ -864,9 +982,11 @@ URLState.prototype = {
   getHost: function () {
     var host = this.host;
     var port = this.port;
-    return host === null ? ''
-      : port === null ? serializeHost(host)
-      : serializeHost(host) + ':' + port;
+    return host === null
+      ? ""
+      : port === null
+      ? serializeHost(host)
+      : serializeHost(host) + ":" + port;
   },
   setHost: function (host) {
     if (this.cannotBeABaseURL) return;
@@ -875,7 +995,7 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#dom-url-hostname
   getHostname: function () {
     var host = this.host;
-    return host === null ? '' : serializeHost(host);
+    return host === null ? "" : serializeHost(host);
   },
   setHostname: function (hostname) {
     if (this.cannotBeABaseURL) return;
@@ -884,18 +1004,22 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#dom-url-port
   getPort: function () {
     var port = this.port;
-    return port === null ? '' : $toString(port);
+    return port === null ? "" : $toString(port);
   },
   setPort: function (port) {
     if (this.cannotHaveUsernamePasswordPort()) return;
     port = $toString(port);
-    if (port === '') this.port = null;
+    if (port === "") this.port = null;
     else this.parse(port, PORT);
   },
   // https://url.spec.whatwg.org/#dom-url-pathname
   getPathname: function () {
     var path = this.path;
-    return this.cannotBeABaseURL ? path[0] : path.length ? '/' + join(path, '/') : '';
+    return this.cannotBeABaseURL
+      ? path[0]
+      : path.length
+      ? "/" + join(path, "/")
+      : "";
   },
   setPathname: function (pathname) {
     if (this.cannotBeABaseURL) return;
@@ -905,15 +1029,15 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#dom-url-search
   getSearch: function () {
     var query = this.query;
-    return query ? '?' + query : '';
+    return query ? "?" + query : "";
   },
   setSearch: function (search) {
     search = $toString(search);
-    if (search === '') {
+    if (search === "") {
       this.query = null;
     } else {
-      if (charAt(search, 0) === '?') search = stringSlice(search, 1);
-      this.query = '';
+      if (charAt(search, 0) === "?") search = stringSlice(search, 1);
+      this.query = "";
       this.parse(search, QUERY);
     }
     this.searchParams.update();
@@ -925,28 +1049,29 @@ URLState.prototype = {
   // https://url.spec.whatwg.org/#dom-url-hash
   getHash: function () {
     var fragment = this.fragment;
-    return fragment ? '#' + fragment : '';
+    return fragment ? "#" + fragment : "";
   },
   setHash: function (hash) {
     hash = $toString(hash);
-    if (hash === '') {
+    if (hash === "") {
       this.fragment = null;
       return;
     }
-    if (charAt(hash, 0) === '#') hash = stringSlice(hash, 1);
-    this.fragment = '';
+    if (charAt(hash, 0) === "#") hash = stringSlice(hash, 1);
+    this.fragment = "";
     this.parse(hash, FRAGMENT);
   },
   update: function () {
     this.query = this.searchParams.serialize() || null;
-  }
+  },
 };
 
 // `URL` constructor
 // https://url.spec.whatwg.org/#url-class
 var URLConstructor = function URL(url /* , base */) {
   var that = anInstance(this, URLPrototype);
-  var base = validateArgumentsLength(arguments.length, 1) > 1 ? arguments[1] : undefined;
+  var base =
+    validateArgumentsLength(arguments.length, 1) > 1 ? arguments[1] : undefined;
   var state = setInternalState(that, new URLState(url, false, base));
   if (!DESCRIPTORS) {
     that.href = state.serialize();
@@ -971,78 +1096,156 @@ var accessorDescriptor = function (getter, setter) {
     get: function () {
       return getInternalURLState(this)[getter]();
     },
-    set: setter && function (value) {
-      return getInternalURLState(this)[setter](value);
-    },
+    set:
+      setter &&
+      function (value) {
+        return getInternalURLState(this)[setter](value);
+      },
     configurable: true,
-    enumerable: true
+    enumerable: true,
   };
 };
 
 if (DESCRIPTORS) {
   // `URL.prototype.href` accessors pair
   // https://url.spec.whatwg.org/#dom-url-href
-  defineBuiltInAccessor(URLPrototype, 'href', accessorDescriptor('serialize', 'setHref'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "href",
+    accessorDescriptor("serialize", "setHref"),
+  );
   // `URL.prototype.origin` getter
   // https://url.spec.whatwg.org/#dom-url-origin
-  defineBuiltInAccessor(URLPrototype, 'origin', accessorDescriptor('getOrigin'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "origin",
+    accessorDescriptor("getOrigin"),
+  );
   // `URL.prototype.protocol` accessors pair
   // https://url.spec.whatwg.org/#dom-url-protocol
-  defineBuiltInAccessor(URLPrototype, 'protocol', accessorDescriptor('getProtocol', 'setProtocol'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "protocol",
+    accessorDescriptor("getProtocol", "setProtocol"),
+  );
   // `URL.prototype.username` accessors pair
   // https://url.spec.whatwg.org/#dom-url-username
-  defineBuiltInAccessor(URLPrototype, 'username', accessorDescriptor('getUsername', 'setUsername'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "username",
+    accessorDescriptor("getUsername", "setUsername"),
+  );
   // `URL.prototype.password` accessors pair
   // https://url.spec.whatwg.org/#dom-url-password
-  defineBuiltInAccessor(URLPrototype, 'password', accessorDescriptor('getPassword', 'setPassword'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "password",
+    accessorDescriptor("getPassword", "setPassword"),
+  );
   // `URL.prototype.host` accessors pair
   // https://url.spec.whatwg.org/#dom-url-host
-  defineBuiltInAccessor(URLPrototype, 'host', accessorDescriptor('getHost', 'setHost'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "host",
+    accessorDescriptor("getHost", "setHost"),
+  );
   // `URL.prototype.hostname` accessors pair
   // https://url.spec.whatwg.org/#dom-url-hostname
-  defineBuiltInAccessor(URLPrototype, 'hostname', accessorDescriptor('getHostname', 'setHostname'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "hostname",
+    accessorDescriptor("getHostname", "setHostname"),
+  );
   // `URL.prototype.port` accessors pair
   // https://url.spec.whatwg.org/#dom-url-port
-  defineBuiltInAccessor(URLPrototype, 'port', accessorDescriptor('getPort', 'setPort'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "port",
+    accessorDescriptor("getPort", "setPort"),
+  );
   // `URL.prototype.pathname` accessors pair
   // https://url.spec.whatwg.org/#dom-url-pathname
-  defineBuiltInAccessor(URLPrototype, 'pathname', accessorDescriptor('getPathname', 'setPathname'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "pathname",
+    accessorDescriptor("getPathname", "setPathname"),
+  );
   // `URL.prototype.search` accessors pair
   // https://url.spec.whatwg.org/#dom-url-search
-  defineBuiltInAccessor(URLPrototype, 'search', accessorDescriptor('getSearch', 'setSearch'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "search",
+    accessorDescriptor("getSearch", "setSearch"),
+  );
   // `URL.prototype.searchParams` getter
   // https://url.spec.whatwg.org/#dom-url-searchparams
-  defineBuiltInAccessor(URLPrototype, 'searchParams', accessorDescriptor('getSearchParams'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "searchParams",
+    accessorDescriptor("getSearchParams"),
+  );
   // `URL.prototype.hash` accessors pair
   // https://url.spec.whatwg.org/#dom-url-hash
-  defineBuiltInAccessor(URLPrototype, 'hash', accessorDescriptor('getHash', 'setHash'));
+  defineBuiltInAccessor(
+    URLPrototype,
+    "hash",
+    accessorDescriptor("getHash", "setHash"),
+  );
 }
 
 // `URL.prototype.toJSON` method
 // https://url.spec.whatwg.org/#dom-url-tojson
-defineBuiltIn(URLPrototype, 'toJSON', function toJSON() {
-  return getInternalURLState(this).serialize();
-}, { enumerable: true });
+defineBuiltIn(
+  URLPrototype,
+  "toJSON",
+  function toJSON() {
+    return getInternalURLState(this).serialize();
+  },
+  { enumerable: true },
+);
 
 // `URL.prototype.toString` method
 // https://url.spec.whatwg.org/#URL-stringification-behavior
-defineBuiltIn(URLPrototype, 'toString', function toString() {
-  return getInternalURLState(this).serialize();
-}, { enumerable: true });
+defineBuiltIn(
+  URLPrototype,
+  "toString",
+  function toString() {
+    return getInternalURLState(this).serialize();
+  },
+  { enumerable: true },
+);
 
 if (NativeURL) {
   var nativeCreateObjectURL = NativeURL.createObjectURL;
   var nativeRevokeObjectURL = NativeURL.revokeObjectURL;
   // `URL.createObjectURL` method
   // https://developer.mozilla.org/en-US/docs/Web/API/URL/createObjectURL
-  if (nativeCreateObjectURL) defineBuiltIn(URLConstructor, 'createObjectURL', bind(nativeCreateObjectURL, NativeURL));
+  if (nativeCreateObjectURL)
+    defineBuiltIn(
+      URLConstructor,
+      "createObjectURL",
+      bind(nativeCreateObjectURL, NativeURL),
+    );
   // `URL.revokeObjectURL` method
   // https://developer.mozilla.org/en-US/docs/Web/API/URL/revokeObjectURL
-  if (nativeRevokeObjectURL) defineBuiltIn(URLConstructor, 'revokeObjectURL', bind(nativeRevokeObjectURL, NativeURL));
+  if (nativeRevokeObjectURL)
+    defineBuiltIn(
+      URLConstructor,
+      "revokeObjectURL",
+      bind(nativeRevokeObjectURL, NativeURL),
+    );
 }
 
-setToStringTag(URLConstructor, 'URL');
+setToStringTag(URLConstructor, "URL");
 
-$({ global: true, constructor: true, forced: !USE_NATIVE_URL, sham: !DESCRIPTORS }, {
-  URL: URLConstructor
-});
+$(
+  {
+    global: true,
+    constructor: true,
+    forced: !USE_NATIVE_URL,
+    sham: !DESCRIPTORS,
+  },
+  {
+    URL: URLConstructor,
+  },
+);

@@ -1,5 +1,5 @@
-'use strict';
-require('../../../modules/es.array.to-spliced');
-var entryVirtual = require('../../../internals/entry-virtual');
+"use strict";
+require("../../../modules/es.array.to-spliced");
+var entryVirtual = require("../../../internals/entry-virtual");
 
-module.exports = entryVirtual('Array').toSpliced;
+module.exports = entryVirtual("Array").toSpliced;

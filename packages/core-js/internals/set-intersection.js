@@ -1,10 +1,10 @@
-'use strict';
-var aSet = require('../internals/a-set');
-var SetHelpers = require('../internals/set-helpers');
-var size = require('../internals/set-size');
-var getSetRecord = require('../internals/get-set-record');
-var iterateSet = require('../internals/set-iterate');
-var iterateSimple = require('../internals/iterate-simple');
+"use strict";
+var aSet = require("../internals/a-set");
+var SetHelpers = require("../internals/set-helpers");
+var size = require("../internals/set-size");
+var getSetRecord = require("../internals/get-set-record");
+var iterateSet = require("../internals/set-iterate");
+var iterateSimple = require("../internals/iterate-simple");
 
 var Set = SetHelpers.Set;
 var add = SetHelpers.add;

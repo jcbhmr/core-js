@@ -1,6 +1,6 @@
-'use strict';
-var SetHelpers = require('../internals/set-helpers');
-var iterate = require('../internals/set-iterate');
+"use strict";
+var SetHelpers = require("../internals/set-helpers");
+var iterate = require("../internals/set-iterate");
 
 var Set = SetHelpers.Set;
 var add = SetHelpers.add;

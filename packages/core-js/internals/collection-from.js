@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 // https://tc39.github.io/proposal-setmap-offrom/
-var bind = require('../internals/function-bind-context');
-var call = require('../internals/function-call');
-var aCallable = require('../internals/a-callable');
-var aConstructor = require('../internals/a-constructor');
-var isNullOrUndefined = require('../internals/is-null-or-undefined');
-var iterate = require('../internals/iterate');
+var bind = require("../internals/function-bind-context");
+var call = require("../internals/function-call");
+var aCallable = require("../internals/a-callable");
+var aConstructor = require("../internals/a-constructor");
+var isNullOrUndefined = require("../internals/is-null-or-undefined");
+var iterate = require("../internals/iterate");
 
 var push = [].push;
 

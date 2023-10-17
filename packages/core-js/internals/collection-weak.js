@@ -1,15 +1,15 @@
-'use strict';
-var uncurryThis = require('../internals/function-uncurry-this');
-var defineBuiltIns = require('../internals/define-built-ins');
-var getWeakData = require('../internals/internal-metadata').getWeakData;
-var anInstance = require('../internals/an-instance');
-var anObject = require('../internals/an-object');
-var isNullOrUndefined = require('../internals/is-null-or-undefined');
-var isObject = require('../internals/is-object');
-var iterate = require('../internals/iterate');
-var ArrayIterationModule = require('../internals/array-iteration');
-var hasOwn = require('../internals/has-own-property');
-var InternalStateModule = require('../internals/internal-state');
+"use strict";
+var uncurryThis = require("../internals/function-uncurry-this");
+var defineBuiltIns = require("../internals/define-built-ins");
+var getWeakData = require("../internals/internal-metadata").getWeakData;
+var anInstance = require("../internals/an-instance");
+var anObject = require("../internals/an-object");
+var isNullOrUndefined = require("../internals/is-null-or-undefined");
+var isObject = require("../internals/is-object");
+var iterate = require("../internals/iterate");
+var ArrayIterationModule = require("../internals/array-iteration");
+var hasOwn = require("../internals/has-own-property");
+var InternalStateModule = require("../internals/internal-state");
 
 var setInternalState = InternalStateModule.set;
 var internalStateGetterFor = InternalStateModule.getterFor;
@@ -46,13 +46,13 @@ UncaughtFrozenStore.prototype = {
     if (entry) entry[1] = value;
     else this.entries.push([key, value]);
   },
-  'delete': function (key) {
+  delete: function (key) {
     var index = findIndex(this.entries, function (it) {
       return it[0] === key;
     });
     if (~index) splice(this.entries, index, 1);
     return !!~index;
-  }
+  },
 };
 
 module.exports = {
@@ -62,9 +62,10 @@ module.exports = {
       setInternalState(that, {
         type: CONSTRUCTOR_NAME,
         id: id++,
-        frozen: undefined
+        frozen: undefined,
       });
-      if (!isNullOrUndefined(iterable)) iterate(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
+      if (!isNullOrUndefined(iterable))
+        iterate(iterable, that[ADDER], { that: that, AS_ENTRIES: IS_MAP });
     });
 
     var Prototype = Constructor.prototype;
@@ -83,11 +84,11 @@ module.exports = {
       // `{ WeakMap, WeakSet }.prototype.delete(key)` methods
       // https://tc39.es/ecma262/#sec-weakmap.prototype.delete
       // https://tc39.es/ecma262/#sec-weakset.prototype.delete
-      'delete': function (key) {
+      delete: function (key) {
         var state = getInternalState(this);
         if (!isObject(key)) return false;
         var data = getWeakData(key);
-        if (data === true) return uncaughtFrozenStore(state)['delete'](key);
+        if (data === true) return uncaughtFrozenStore(state)["delete"](key);
         return data && hasOwn(data, state.id) && delete data[state.id];
       },
       // `{ WeakMap, WeakSet }.prototype.has(key)` methods
@@ -99,33 +100,38 @@ module.exports = {
         var data = getWeakData(key);
         if (data === true) return uncaughtFrozenStore(state).has(key);
         return data && hasOwn(data, state.id);
-      }
+      },
     });
 
-    defineBuiltIns(Prototype, IS_MAP ? {
-      // `WeakMap.prototype.get(key)` method
-      // https://tc39.es/ecma262/#sec-weakmap.prototype.get
-      get: function get(key) {
-        var state = getInternalState(this);
-        if (isObject(key)) {
-          var data = getWeakData(key);
-          if (data === true) return uncaughtFrozenStore(state).get(key);
-          return data ? data[state.id] : undefined;
-        }
-      },
-      // `WeakMap.prototype.set(key, value)` method
-      // https://tc39.es/ecma262/#sec-weakmap.prototype.set
-      set: function set(key, value) {
-        return define(this, key, value);
-      }
-    } : {
-      // `WeakSet.prototype.add(value)` method
-      // https://tc39.es/ecma262/#sec-weakset.prototype.add
-      add: function add(value) {
-        return define(this, value, true);
-      }
-    });
+    defineBuiltIns(
+      Prototype,
+      IS_MAP
+        ? {
+            // `WeakMap.prototype.get(key)` method
+            // https://tc39.es/ecma262/#sec-weakmap.prototype.get
+            get: function get(key) {
+              var state = getInternalState(this);
+              if (isObject(key)) {
+                var data = getWeakData(key);
+                if (data === true) return uncaughtFrozenStore(state).get(key);
+                return data ? data[state.id] : undefined;
+              }
+            },
+            // `WeakMap.prototype.set(key, value)` method
+            // https://tc39.es/ecma262/#sec-weakmap.prototype.set
+            set: function set(key, value) {
+              return define(this, key, value);
+            },
+          }
+        : {
+            // `WeakSet.prototype.add(value)` method
+            // https://tc39.es/ecma262/#sec-weakset.prototype.add
+            add: function add(value) {
+              return define(this, value, true);
+            },
+          },
+    );
 
     return Constructor;
-  }
+  },
 };

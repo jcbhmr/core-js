@@ -1,5 +1,5 @@
-'use strict';
-var call = require('../internals/function-call');
+"use strict";
+var call = require("../internals/function-call");
 
 module.exports = function (record, fn, ITERATOR_INSTEAD_OF_RECORD) {
   var iterator = ITERATOR_INSTEAD_OF_RECORD ? record : record.iterator;

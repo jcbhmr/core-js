@@ -1,5 +1,5 @@
-'use strict';
-var uncurryThis = require('../internals/function-uncurry-this');
+"use strict";
+var uncurryThis = require("../internals/function-uncurry-this");
 
 // eslint-disable-next-line es/no-weak-map -- safe
 var WeakMapPrototype = WeakMap.prototype;
@@ -10,5 +10,5 @@ module.exports = {
   set: uncurryThis(WeakMapPrototype.set),
   get: uncurryThis(WeakMapPrototype.get),
   has: uncurryThis(WeakMapPrototype.has),
-  remove: uncurryThis(WeakMapPrototype['delete'])
+  remove: uncurryThis(WeakMapPrototype["delete"]),
 };

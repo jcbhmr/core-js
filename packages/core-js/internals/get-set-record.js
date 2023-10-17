@@ -1,11 +1,11 @@
-'use strict';
-var aCallable = require('../internals/a-callable');
-var anObject = require('../internals/an-object');
-var call = require('../internals/function-call');
-var toIntegerOrInfinity = require('../internals/to-integer-or-infinity');
-var getIteratorDirect = require('../internals/get-iterator-direct');
+"use strict";
+var aCallable = require("../internals/a-callable");
+var anObject = require("../internals/an-object");
+var call = require("../internals/function-call");
+var toIntegerOrInfinity = require("../internals/to-integer-or-infinity");
+var getIteratorDirect = require("../internals/get-iterator-direct");
 
-var INVALID_SIZE = 'Invalid size';
+var INVALID_SIZE = "Invalid size";
 var $RangeError = RangeError;
 var $TypeError = TypeError;
 var max = Math.max;
@@ -23,7 +23,7 @@ SetRecord.prototype = {
   },
   includes: function (it) {
     return call(this.has, this.set, it);
-  }
+  },
 };
 
 // `GetSetRecord` abstract operation
@@ -40,6 +40,6 @@ module.exports = function (obj) {
     obj,
     max(intSize, 0),
     aCallable(obj.has),
-    aCallable(obj.keys)
+    aCallable(obj.keys),
   );
 };

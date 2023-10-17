@@ -1,4 +1,4 @@
-'use strict';
+"use strict";
 // iterable DOM collections
 // flag - `iterable` interface - 'entries', 'keys', 'values', 'forEach' methods
 module.exports = {
@@ -32,5 +32,5 @@ module.exports = {
   StyleSheetList: 0,
   TextTrackCueList: 0,
   TextTrackList: 0,
-  TouchList: 0
+  TouchList: 0,
 };

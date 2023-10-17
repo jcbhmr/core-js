@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 // https://github.com/tc39/proposal-iterator-helpers
 // https://github.com/tc39/proposal-array-from-async
-var call = require('../internals/function-call');
-var aCallable = require('../internals/a-callable');
-var anObject = require('../internals/an-object');
-var isObject = require('../internals/is-object');
-var doesNotExceedSafeInteger = require('../internals/does-not-exceed-safe-integer');
-var getBuiltIn = require('../internals/get-built-in');
-var getIteratorDirect = require('../internals/get-iterator-direct');
-var closeAsyncIteration = require('../internals/async-iterator-close');
+var call = require("../internals/function-call");
+var aCallable = require("../internals/a-callable");
+var anObject = require("../internals/an-object");
+var isObject = require("../internals/is-object");
+var doesNotExceedSafeInteger = require("../internals/does-not-exceed-safe-integer");
+var getBuiltIn = require("../internals/get-built-in");
+var getIteratorDirect = require("../internals/get-iterator-direct");
+var closeAsyncIteration = require("../internals/async-iterator-close");
 
 var createMethod = function (TYPE) {
   var IS_TO_ARRAY = TYPE === 0;
@@ -20,7 +20,7 @@ var createMethod = function (TYPE) {
     var MAPPING = fn !== undefined;
     if (MAPPING || !IS_TO_ARRAY) aCallable(fn);
     var record = getIteratorDirect(object);
-    var Promise = getBuiltIn('Promise');
+    var Promise = getBuiltIn("Promise");
     var iterator = record.iterator;
     var next = record.next;
     var counter = 0;
@@ -32,9 +32,12 @@ var createMethod = function (TYPE) {
 
       var loop = function () {
         try {
-          if (MAPPING) try {
-            doesNotExceedSafeInteger(counter);
-          } catch (error5) { ifAbruptCloseAsyncIterator(error5); }
+          if (MAPPING)
+            try {
+              doesNotExceedSafeInteger(counter);
+            } catch (error5) {
+              ifAbruptCloseAsyncIterator(error5);
+            }
           Promise.resolve(anObject(call(next, iterator))).then(function (step) {
             try {
               if (anObject(step).done) {
@@ -52,28 +55,54 @@ var createMethod = function (TYPE) {
                       if (IS_FOR_EACH) {
                         loop();
                       } else if (IS_EVERY) {
-                        $result ? loop() : closeAsyncIteration(iterator, resolve, false, reject);
+                        $result
+                          ? loop()
+                          : closeAsyncIteration(
+                              iterator,
+                              resolve,
+                              false,
+                              reject,
+                            );
                       } else if (IS_TO_ARRAY) {
                         try {
                           target[counter++] = $result;
                           loop();
-                        } catch (error4) { ifAbruptCloseAsyncIterator(error4); }
+                        } catch (error4) {
+                          ifAbruptCloseAsyncIterator(error4);
+                        }
                       } else {
-                        $result ? closeAsyncIteration(iterator, resolve, IS_SOME || value, reject) : loop();
+                        $result
+                          ? closeAsyncIteration(
+                              iterator,
+                              resolve,
+                              IS_SOME || value,
+                              reject,
+                            )
+                          : loop();
                       }
                     };
 
-                    if (isObject(result)) Promise.resolve(result).then(handler, ifAbruptCloseAsyncIterator);
+                    if (isObject(result))
+                      Promise.resolve(result).then(
+                        handler,
+                        ifAbruptCloseAsyncIterator,
+                      );
                     else handler(result);
                   } else {
                     target[counter++] = value;
                     loop();
                   }
-                } catch (error3) { ifAbruptCloseAsyncIterator(error3); }
+                } catch (error3) {
+                  ifAbruptCloseAsyncIterator(error3);
+                }
               }
-            } catch (error2) { reject(error2); }
+            } catch (error2) {
+              reject(error2);
+            }
           }, reject);
-        } catch (error) { reject(error); }
+        } catch (error) {
+          reject(error);
+        }
       };
 
       loop();
@@ -86,5 +115,5 @@ module.exports = {
   forEach: createMethod(1),
   every: createMethod(2),
   some: createMethod(3),
-  find: createMethod(4)
+  find: createMethod(4),
 };

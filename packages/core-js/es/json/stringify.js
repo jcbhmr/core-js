@@ -1,7 +1,7 @@
-'use strict';
-require('../../modules/es.json.stringify');
-var path = require('../../internals/path');
-var apply = require('../../internals/function-apply');
+"use strict";
+require("../../modules/es.json.stringify");
+var path = require("../../internals/path");
+var apply = require("../../internals/function-apply");
 
 // eslint-disable-next-line es/no-json -- safe
 if (!path.JSON) path.JSON = { stringify: JSON.stringify };

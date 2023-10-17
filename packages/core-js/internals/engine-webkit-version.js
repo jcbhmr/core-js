@@ -1,5 +1,5 @@
-'use strict';
-var userAgent = require('../internals/engine-user-agent');
+"use strict";
+var userAgent = require("../internals/engine-user-agent");
 
 var webkit = userAgent.match(/AppleWebKit\/(\d+)\./);
 

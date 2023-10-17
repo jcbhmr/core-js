@@ -1,6 +1,6 @@
-'use strict';
-var uncurryThis = require('../internals/function-uncurry-this');
-var arrayBufferByteLength = require('../internals/array-buffer-byte-length');
+"use strict";
+var uncurryThis = require("../internals/function-uncurry-this");
+var arrayBufferByteLength = require("../internals/array-buffer-byte-length");
 
 var slice = uncurryThis(ArrayBuffer.prototype.slice);
 

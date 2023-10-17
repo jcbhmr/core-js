@@ -1,5 +1,5 @@
-'use strict';
-var getBuiltIn = require('../internals/get-built-in');
+"use strict";
+var getBuiltIn = require("../internals/get-built-in");
 
 var createSetLike = function (size) {
   return {
@@ -11,14 +11,14 @@ var createSetLike = function (size) {
       return {
         next: function () {
           return { done: true };
-        }
+        },
       };
-    }
+    },
   };
 };
 
 module.exports = function (name) {
-  var Set = getBuiltIn('Set');
+  var Set = getBuiltIn("Set");
   try {
     new Set()[name](createSetLike(0));
     try {

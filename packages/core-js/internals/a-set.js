@@ -1,5 +1,5 @@
-'use strict';
-var has = require('../internals/set-helpers').has;
+"use strict";
+var has = require("../internals/set-helpers").has;
 
 // Perform ? RequireInternalSlot(M, [[SetData]])
 module.exports = function (it) {

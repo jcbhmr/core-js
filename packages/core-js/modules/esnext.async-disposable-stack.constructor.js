@@ -1,35 +1,38 @@
-'use strict';
+"use strict";
 // https://github.com/tc39/proposal-async-explicit-resource-management
-var $ = require('../internals/export');
-var DESCRIPTORS = require('../internals/descriptors');
-var getBuiltIn = require('../internals/get-built-in');
-var aCallable = require('../internals/a-callable');
-var anInstance = require('../internals/an-instance');
-var defineBuiltIn = require('../internals/define-built-in');
-var defineBuiltIns = require('../internals/define-built-ins');
-var defineBuiltInAccessor = require('../internals/define-built-in-accessor');
-var wellKnownSymbol = require('../internals/well-known-symbol');
-var InternalStateModule = require('../internals/internal-state');
-var addDisposableResource = require('../internals/add-disposable-resource');
+var $ = require("../internals/export");
+var DESCRIPTORS = require("../internals/descriptors");
+var getBuiltIn = require("../internals/get-built-in");
+var aCallable = require("../internals/a-callable");
+var anInstance = require("../internals/an-instance");
+var defineBuiltIn = require("../internals/define-built-in");
+var defineBuiltIns = require("../internals/define-built-ins");
+var defineBuiltInAccessor = require("../internals/define-built-in-accessor");
+var wellKnownSymbol = require("../internals/well-known-symbol");
+var InternalStateModule = require("../internals/internal-state");
+var addDisposableResource = require("../internals/add-disposable-resource");
 
-var Promise = getBuiltIn('Promise');
-var SuppressedError = getBuiltIn('SuppressedError');
+var Promise = getBuiltIn("Promise");
+var SuppressedError = getBuiltIn("SuppressedError");
 var $ReferenceError = ReferenceError;
 
-var ASYNC_DISPOSE = wellKnownSymbol('asyncDispose');
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
+var ASYNC_DISPOSE = wellKnownSymbol("asyncDispose");
+var TO_STRING_TAG = wellKnownSymbol("toStringTag");
 
-var ASYNC_DISPOSABLE_STACK = 'AsyncDisposableStack';
+var ASYNC_DISPOSABLE_STACK = "AsyncDisposableStack";
 var setInternalState = InternalStateModule.set;
-var getAsyncDisposableStackInternalState = InternalStateModule.getterFor(ASYNC_DISPOSABLE_STACK);
+var getAsyncDisposableStackInternalState = InternalStateModule.getterFor(
+  ASYNC_DISPOSABLE_STACK,
+);
 
-var HINT = 'async-dispose';
-var DISPOSED = 'disposed';
-var PENDING = 'pending';
+var HINT = "async-dispose";
+var DISPOSED = "disposed";
+var PENDING = "pending";
 
 var getPendingAsyncDisposableStackInternalState = function (stack) {
   var internalState = getAsyncDisposableStackInternalState(stack);
-  if (internalState.state === DISPOSED) throw new $ReferenceError(ASYNC_DISPOSABLE_STACK + ' already disposed');
+  if (internalState.state === DISPOSED)
+    throw new $ReferenceError(ASYNC_DISPOSABLE_STACK + " already disposed");
   return internalState;
 };
 
@@ -37,7 +40,7 @@ var $AsyncDisposableStack = function AsyncDisposableStack() {
   setInternalState(anInstance(this, AsyncDisposableStackPrototype), {
     type: ASYNC_DISPOSABLE_STACK,
     state: PENDING,
-    stack: []
+    stack: [],
   });
 
   if (!DESCRIPTORS) this.disposed = false;
@@ -49,7 +52,8 @@ defineBuiltIns(AsyncDisposableStackPrototype, {
   disposeAsync: function disposeAsync() {
     var asyncDisposableStack = this;
     return new Promise(function (resolve, reject) {
-      var internalState = getAsyncDisposableStackInternalState(asyncDisposableStack);
+      var internalState =
+        getAsyncDisposableStackInternalState(asyncDisposableStack);
       if (internalState.state === DISPOSED) return resolve(undefined);
       internalState.state = DISPOSED;
       if (!DESCRIPTORS) asyncDisposableStack.disposed = true;
@@ -88,7 +92,11 @@ defineBuiltIns(AsyncDisposableStackPrototype, {
     });
   },
   use: function use(value) {
-    addDisposableResource(getPendingAsyncDisposableStackInternalState(this), value, HINT);
+    addDisposableResource(
+      getPendingAsyncDisposableStackInternalState(this),
+      value,
+      HINT,
+    );
     return value;
   },
   adopt: function adopt(value, onDispose) {
@@ -107,24 +115,39 @@ defineBuiltIns(AsyncDisposableStackPrototype, {
   move: function move() {
     var internalState = getPendingAsyncDisposableStackInternalState(this);
     var newAsyncDisposableStack = new $AsyncDisposableStack();
-    getAsyncDisposableStackInternalState(newAsyncDisposableStack).stack = internalState.stack;
+    getAsyncDisposableStackInternalState(newAsyncDisposableStack).stack =
+      internalState.stack;
     internalState.stack = [];
     internalState.state = DISPOSED;
     if (!DESCRIPTORS) this.disposed = true;
     return newAsyncDisposableStack;
-  }
+  },
 });
 
-if (DESCRIPTORS) defineBuiltInAccessor(AsyncDisposableStackPrototype, 'disposed', {
-  configurable: true,
-  get: function disposed() {
-    return getAsyncDisposableStackInternalState(this).state === DISPOSED;
-  }
-});
+if (DESCRIPTORS)
+  defineBuiltInAccessor(AsyncDisposableStackPrototype, "disposed", {
+    configurable: true,
+    get: function disposed() {
+      return getAsyncDisposableStackInternalState(this).state === DISPOSED;
+    },
+  });
 
-defineBuiltIn(AsyncDisposableStackPrototype, ASYNC_DISPOSE, AsyncDisposableStackPrototype.disposeAsync, { name: 'disposeAsync' });
-defineBuiltIn(AsyncDisposableStackPrototype, TO_STRING_TAG, ASYNC_DISPOSABLE_STACK, { nonWritable: true });
+defineBuiltIn(
+  AsyncDisposableStackPrototype,
+  ASYNC_DISPOSE,
+  AsyncDisposableStackPrototype.disposeAsync,
+  { name: "disposeAsync" },
+);
+defineBuiltIn(
+  AsyncDisposableStackPrototype,
+  TO_STRING_TAG,
+  ASYNC_DISPOSABLE_STACK,
+  { nonWritable: true },
+);
 
-$({ global: true, constructor: true }, {
-  AsyncDisposableStack: $AsyncDisposableStack
-});
+$(
+  { global: true, constructor: true },
+  {
+    AsyncDisposableStack: $AsyncDisposableStack,
+  },
+);

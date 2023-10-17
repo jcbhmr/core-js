@@ -1,8 +1,8 @@
-'use strict';
-var call = require('../internals/function-call');
-var aCallable = require('../internals/a-callable');
-var isCallable = require('../internals/is-callable');
-var anObject = require('../internals/an-object');
+"use strict";
+var call = require("../internals/function-call");
+var aCallable = require("../internals/a-callable");
+var isCallable = require("../internals/is-callable");
+var anObject = require("../internals/an-object");
 
 var $TypeError = TypeError;
 
@@ -16,7 +16,7 @@ module.exports = function upsert(key, updateFn /* , insertFn */) {
   var insertFn = arguments.length > 2 ? arguments[2] : undefined;
   var value;
   if (!isCallable(updateFn) && !isCallable(insertFn)) {
-    throw new $TypeError('At least one callback required');
+    throw new $TypeError("At least one callback required");
   }
   if (call(has, map, key)) {
     value = call(get, map, key);
@@ -27,5 +27,6 @@ module.exports = function upsert(key, updateFn /* , insertFn */) {
   } else if (isCallable(insertFn)) {
     value = insertFn();
     call(set, map, key, value);
-  } return value;
+  }
+  return value;
 };

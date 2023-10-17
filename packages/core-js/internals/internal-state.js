@@ -1,14 +1,14 @@
-'use strict';
-var NATIVE_WEAK_MAP = require('../internals/weak-map-basic-detection');
-var global = require('../internals/global');
-var isObject = require('../internals/is-object');
-var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
-var hasOwn = require('../internals/has-own-property');
-var shared = require('../internals/shared-store');
-var sharedKey = require('../internals/shared-key');
-var hiddenKeys = require('../internals/hidden-keys');
+"use strict";
+var NATIVE_WEAK_MAP = require("../internals/weak-map-basic-detection");
+var global = require("../internals/global");
+var isObject = require("../internals/is-object");
+var createNonEnumerableProperty = require("../internals/create-non-enumerable-property");
+var hasOwn = require("../internals/has-own-property");
+var shared = require("../internals/shared-store");
+var sharedKey = require("../internals/shared-key");
+var hiddenKeys = require("../internals/hidden-keys");
 
-var OBJECT_ALREADY_INITIALIZED = 'Object already initialized';
+var OBJECT_ALREADY_INITIALIZED = "Object already initialized";
 var TypeError = global.TypeError;
 var WeakMap = global.WeakMap;
 var set, get, has;
@@ -21,8 +21,9 @@ var getterFor = function (TYPE) {
   return function (it) {
     var state;
     if (!isObject(it) || (state = get(it)).type !== TYPE) {
-      throw new TypeError('Incompatible receiver, ' + TYPE + ' required');
-    } return state;
+      throw new TypeError("Incompatible receiver, " + TYPE + " required");
+    }
+    return state;
   };
 };
 
@@ -46,7 +47,7 @@ if (NATIVE_WEAK_MAP || shared.state) {
     return store.has(it);
   };
 } else {
-  var STATE = sharedKey('state');
+  var STATE = sharedKey("state");
   hiddenKeys[STATE] = true;
   set = function (it, metadata) {
     if (hasOwn(it, STATE)) throw new TypeError(OBJECT_ALREADY_INITIALIZED);
@@ -67,5 +68,5 @@ module.exports = {
   get: get,
   has: has,
   enforce: enforce,
-  getterFor: getterFor
+  getterFor: getterFor,
 };

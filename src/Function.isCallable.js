@@ -12,11 +12,11 @@ function isClassConstructor(value) {
 }
 
 /**
+ * @name Function.isCallable
  * @param {any} argument
  * @returns {boolean}
  * @see https://github.com/caitp/TC39-Proposals/blob/trunk/tc39-reflect-isconstructor-iscallable.md#functioniscallable--argument-
- * @category function
- * @stage 0
+ * @category Stage 0
  */
 module.exports = function isCallable(argument) {
   return typeof argument === "function" && !isClassConstructor(argument);

@@ -1,8 +1,8 @@
-'use strict';
-var hasOwn = require('../internals/has-own-property');
-var ownKeys = require('../internals/own-keys');
-var getOwnPropertyDescriptorModule = require('../internals/object-get-own-property-descriptor');
-var definePropertyModule = require('../internals/object-define-property');
+"use strict";
+var hasOwn = require("../internals/has-own-property");
+var ownKeys = require("../internals/own-keys");
+var getOwnPropertyDescriptorModule = require("../internals/object-get-own-property-descriptor");
+var definePropertyModule = require("../internals/object-define-property");
 
 module.exports = function (target, source, exceptions) {
   var keys = ownKeys(source);

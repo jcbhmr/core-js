@@ -1,6 +1,6 @@
-'use strict';
-require('../../modules/es.object.get-own-property-names');
-var path = require('../../internals/path');
+"use strict";
+require("../../modules/es.object.get-own-property-names");
+var path = require("../../internals/path");
 
 var Object = path.Object;
 

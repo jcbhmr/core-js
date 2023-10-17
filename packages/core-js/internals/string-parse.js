@@ -1,14 +1,14 @@
-'use strict';
+"use strict";
 // adapted from https://github.com/jridgewell/string-dedent
-var getBuiltIn = require('../internals/get-built-in');
-var uncurryThis = require('../internals/function-uncurry-this');
+var getBuiltIn = require("../internals/get-built-in");
+var uncurryThis = require("../internals/function-uncurry-this");
 
 var fromCharCode = String.fromCharCode;
-var fromCodePoint = getBuiltIn('String', 'fromCodePoint');
-var charAt = uncurryThis(''.charAt);
-var charCodeAt = uncurryThis(''.charCodeAt);
-var stringIndexOf = uncurryThis(''.indexOf);
-var stringSlice = uncurryThis(''.slice);
+var fromCodePoint = getBuiltIn("String", "fromCodePoint");
+var charAt = uncurryThis("".charAt);
+var charCodeAt = uncurryThis("".charCodeAt);
+var stringIndexOf = uncurryThis("".indexOf);
+var stringSlice = uncurryThis("".slice);
 
 var ZERO_CODE = 48;
 var NINE_CODE = 57;
@@ -41,12 +41,12 @@ var hexToInt = function (c) {
 };
 
 module.exports = function (raw) {
-  var out = '';
+  var out = "";
   var start = 0;
   // We need to find every backslash escape sequence, and cook the escape into a real char.
   var i = 0;
   var n;
-  while ((i = stringIndexOf(raw, '\\', i)) > -1) {
+  while ((i = stringIndexOf(raw, "\\", i)) > -1) {
     out += stringSlice(raw, start, i);
     // If the backslash is the last char of the string, then it was an invalid sequence.
     // This can't actually happen in a tagged template literal, but could happen if you manually
@@ -55,40 +55,40 @@ module.exports = function (raw) {
     var next = charAt(raw, i++);
     switch (next) {
       // Escaped control codes need to be individually processed.
-      case 'b':
-        out += '\b';
+      case "b":
+        out += "\b";
         break;
-      case 't':
-        out += '\t';
+      case "t":
+        out += "\t";
         break;
-      case 'n':
-        out += '\n';
+      case "n":
+        out += "\n";
         break;
-      case 'v':
-        out += '\v';
+      case "v":
+        out += "\v";
         break;
-      case 'f':
-        out += '\f';
+      case "f":
+        out += "\f";
         break;
-      case 'r':
-        out += '\r';
+      case "r":
+        out += "\r";
         break;
       // Escaped line terminators just skip the char.
-      case '\r':
+      case "\r":
         // Treat `\r\n` as a single terminator.
-        if (i < raw.length && charAt(raw, i) === '\n') ++i;
+        if (i < raw.length && charAt(raw, i) === "\n") ++i;
       // break omitted
-      case '\n':
-      case '\u2028':
-      case '\u2029':
+      case "\n":
+      case "\u2028":
+      case "\u2029":
         break;
       // `\0` is a null control char, but `\0` followed by another digit is an illegal octal escape.
-      case '0':
+      case "0":
         if (isDigit(raw, i)) return;
-        out += '\0';
+        out += "\0";
         break;
       // Hex escapes must contain 2 hex chars.
-      case 'x':
+      case "x":
         n = parseHex(raw, i, i + 2);
         if (n === -1) return;
         i += 2;
@@ -96,9 +96,9 @@ module.exports = function (raw) {
         break;
       // Unicode escapes contain either 4 chars, or an unlimited number between `{` and `}`.
       // The hex value must not overflow 0x10FFFF.
-      case 'u':
-        if (i < raw.length && charAt(raw, i) === '{') {
-          var end = stringIndexOf(raw, '}', ++i);
+      case "u":
+        if (i < raw.length && charAt(raw, i) === "{") {
+          var end = stringIndexOf(raw, "}", ++i);
           if (end === -1) return;
           n = parseHex(raw, i, end);
           i = end + 1;
@@ -106,7 +106,7 @@ module.exports = function (raw) {
           n = parseHex(raw, i, i + 4);
           i += 4;
         }
-        if (n === -1 || n > 0x10FFFF) return;
+        if (n === -1 || n > 0x10ffff) return;
         out += fromCodePoint(n);
         break;
       default:

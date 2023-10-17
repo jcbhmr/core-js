@@ -1,5 +1,5 @@
-'use strict';
-var requireObjectCoercible = require('../internals/require-object-coercible');
+"use strict";
+var requireObjectCoercible = require("../internals/require-object-coercible");
 
 var $Object = Object;
 

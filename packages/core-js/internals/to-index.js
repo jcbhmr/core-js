@@ -1,6 +1,6 @@
-'use strict';
-var toIntegerOrInfinity = require('../internals/to-integer-or-infinity');
-var toLength = require('../internals/to-length');
+"use strict";
+var toIntegerOrInfinity = require("../internals/to-integer-or-infinity");
+var toLength = require("../internals/to-length");
 
 var $RangeError = RangeError;
 
@@ -10,6 +10,6 @@ module.exports = function (it) {
   if (it === undefined) return 0;
   var number = toIntegerOrInfinity(it);
   var length = toLength(number);
-  if (number !== length) throw new $RangeError('Wrong length or index');
+  if (number !== length) throw new $RangeError("Wrong length or index");
   return length;
 };

@@ -1,2 +1,3 @@
-'use strict';
-module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
+"use strict";
+module.exports =
+  (typeof navigator != "undefined" && String(navigator.userAgent)) || "";

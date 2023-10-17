@@ -1,11 +1,11 @@
-'use strict';
+"use strict";
 // TODO: Remove from `core-js@4`
-var uncurryThis = require('../internals/function-uncurry-this');
-var defineBuiltIn = require('../internals/define-built-in');
+var uncurryThis = require("../internals/function-uncurry-this");
+var defineBuiltIn = require("../internals/define-built-in");
 
 var DatePrototype = Date.prototype;
-var INVALID_DATE = 'Invalid Date';
-var TO_STRING = 'toString';
+var INVALID_DATE = "Invalid Date";
+var TO_STRING = "toString";
 var nativeDateToString = uncurryThis(DatePrototype[TO_STRING]);
 var thisTimeValue = uncurryThis(DatePrototype.getTime);
 

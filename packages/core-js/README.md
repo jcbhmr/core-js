@@ -6,8 +6,7 @@
 
 </div>
 
-**I highly recommend reading this: [So, what's next?](https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md)**
----
+## **I highly recommend reading this: [So, what's next?](https://github.com/zloirock/core-js/blob/master/docs/2023-02-14-so-whats-next.md)**
 
 > Modular standard library for JavaScript. Includes polyfills for [ECMAScript up to 2023](https://github.com/zloirock/core-js#ecmascript): [promises](https://github.com/zloirock/core-js#ecmascript-promise), [symbols](https://github.com/zloirock/core-js#ecmascript-symbol), [collections](https://github.com/zloirock/core-js#ecmascript-collections), iterators, [typed arrays](https://github.com/zloirock/core-js#ecmascript-typed-arrays), many other features, [ECMAScript proposals](https://github.com/zloirock/core-js#ecmascript-proposals), [some cross-platform WHATWG / W3C features and proposals](#web-standards) like [`URL`](https://github.com/zloirock/core-js#url-and-urlsearchparams). You can load only required features or use it without global namespace pollution.
 
@@ -25,68 +24,82 @@
 
 ---
 
-[*Example of usage*](https://tinyurl.com/2mknex43):
-```js
-import 'core-js/actual';
+[_Example of usage_](https://tinyurl.com/2mknex43):
 
-Promise.resolve(42).then(it => console.log(it)); // => 42
+```js
+import "core-js/actual";
+
+Promise.resolve(42).then((it) => console.log(it)); // => 42
 
 Array.from(new Set([1, 2, 3]).union(new Set([3, 4, 5]))); // => [1, 2, 3, 4, 5]
 
-[1, 2].flatMap(it => [it, it]); // => [1, 1, 2, 2]
+[1, 2].flatMap((it) => [it, it]); // => [1, 1, 2, 2]
 
-(function * (i) { while (true) yield i++; })(1)
-  .drop(1).take(5)
-  .filter(it => it % 2)
-  .map(it => it ** 2)
+(function* (i) {
+  while (true) yield i++;
+})(1)
+  .drop(1)
+  .take(5)
+  .filter((it) => it % 2)
+  .map((it) => it ** 2)
   .toArray(); // => [9, 25]
 
 structuredClone(new Set([1, 2, 3])); // => new Set([1, 2, 3])
 ```
 
-*You can load only required features*:
-```js
-import 'core-js/actual/promise';
-import 'core-js/actual/set';
-import 'core-js/actual/iterator';
-import 'core-js/actual/array/from';
-import 'core-js/actual/array/flat-map';
-import 'core-js/actual/structured-clone';
+_You can load only required features_:
 
-Promise.resolve(42).then(it => console.log(it)); // => 42
+```js
+import "core-js/actual/promise";
+import "core-js/actual/set";
+import "core-js/actual/iterator";
+import "core-js/actual/array/from";
+import "core-js/actual/array/flat-map";
+import "core-js/actual/structured-clone";
+
+Promise.resolve(42).then((it) => console.log(it)); // => 42
 
 Array.from(new Set([1, 2, 3]).union(new Set([3, 4, 5]))); // => [1, 2, 3, 4, 5]
 
-[1, 2].flatMap(it => [it, it]); // => [1, 1, 2, 2]
+[1, 2].flatMap((it) => [it, it]); // => [1, 1, 2, 2]
 
-(function * (i) { while (true) yield i++; })(1)
-  .drop(1).take(5)
-  .filter(it => it % 2)
-  .map(it => it ** 2)
+(function* (i) {
+  while (true) yield i++;
+})(1)
+  .drop(1)
+  .take(5)
+  .filter((it) => it % 2)
+  .map((it) => it ** 2)
   .toArray(); // => [9, 25]
 
 structuredClone(new Set([1, 2, 3])); // => new Set([1, 2, 3])
 ```
 
-*Or use it without global namespace pollution*:
-```js
-import Promise from 'core-js-pure/actual/promise';
-import Set from 'core-js-pure/actual/set';
-import Iterator from 'core-js-pure/actual/iterator';
-import from from 'core-js-pure/actual/array/from';
-import flatMap from 'core-js-pure/actual/array/flat-map';
-import structuredClone from 'core-js-pure/actual/structured-clone';
+_Or use it without global namespace pollution_:
 
-Promise.resolve(42).then(it => console.log(it)); // => 42
+```js
+import Promise from "core-js-pure/actual/promise";
+import Set from "core-js-pure/actual/set";
+import Iterator from "core-js-pure/actual/iterator";
+import from from "core-js-pure/actual/array/from";
+import flatMap from "core-js-pure/actual/array/flat-map";
+import structuredClone from "core-js-pure/actual/structured-clone";
+
+Promise.resolve(42).then((it) => console.log(it)); // => 42
 
 from(new Set([1, 2, 3]).union(new Set([3, 4, 5]))); // => [1, 2, 3, 4, 5]
 
-flatMap([1, 2], it => [it, it]); // => [1, 1, 2, 2]
+flatMap([1, 2], (it) => [it, it]); // => [1, 1, 2, 2]
 
-Iterator.from(function * (i) { while (true) yield i++; }(1))
-  .drop(1).take(5)
-  .filter(it => it % 2)
-  .map(it => it ** 2)
+Iterator.from(
+  (function* (i) {
+    while (true) yield i++;
+  })(1),
+)
+  .drop(1)
+  .take(5)
+  .filter((it) => it % 2)
+  .map((it) => it ** 2)
   .toArray(); // => [9, 25]
 
 structuredClone(new Set([1, 2, 3])); // => new Set([1, 2, 3])

@@ -1,22 +1,25 @@
-'use strict';
-var call = require('../internals/function-call');
-var create = require('../internals/object-create');
-var createNonEnumerableProperty = require('../internals/create-non-enumerable-property');
-var defineBuiltIns = require('../internals/define-built-ins');
-var wellKnownSymbol = require('../internals/well-known-symbol');
-var InternalStateModule = require('../internals/internal-state');
-var getMethod = require('../internals/get-method');
-var IteratorPrototype = require('../internals/iterators-core').IteratorPrototype;
-var createIterResultObject = require('../internals/create-iter-result-object');
-var iteratorClose = require('../internals/iterator-close');
+"use strict";
+var call = require("../internals/function-call");
+var create = require("../internals/object-create");
+var createNonEnumerableProperty = require("../internals/create-non-enumerable-property");
+var defineBuiltIns = require("../internals/define-built-ins");
+var wellKnownSymbol = require("../internals/well-known-symbol");
+var InternalStateModule = require("../internals/internal-state");
+var getMethod = require("../internals/get-method");
+var IteratorPrototype =
+  require("../internals/iterators-core").IteratorPrototype;
+var createIterResultObject = require("../internals/create-iter-result-object");
+var iteratorClose = require("../internals/iterator-close");
 
-var TO_STRING_TAG = wellKnownSymbol('toStringTag');
-var ITERATOR_HELPER = 'IteratorHelper';
-var WRAP_FOR_VALID_ITERATOR = 'WrapForValidIterator';
+var TO_STRING_TAG = wellKnownSymbol("toStringTag");
+var ITERATOR_HELPER = "IteratorHelper";
+var WRAP_FOR_VALID_ITERATOR = "WrapForValidIterator";
 var setInternalState = InternalStateModule.set;
 
 var createIteratorProxyPrototype = function (IS_ITERATOR) {
-  var getInternalState = InternalStateModule.getterFor(IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER);
+  var getInternalState = InternalStateModule.getterFor(
+    IS_ITERATOR ? WRAP_FOR_VALID_ITERATOR : ITERATOR_HELPER,
+  );
 
   return defineBuiltIns(create(IteratorPrototype), {
     next: function next() {
@@ -33,29 +36,36 @@ var createIteratorProxyPrototype = function (IS_ITERATOR) {
         throw error;
       }
     },
-    'return': function () {
+    return: function () {
       var state = getInternalState(this);
       var iterator = state.iterator;
       state.done = true;
       if (IS_ITERATOR) {
-        var returnMethod = getMethod(iterator, 'return');
-        return returnMethod ? call(returnMethod, iterator) : createIterResultObject(undefined, true);
+        var returnMethod = getMethod(iterator, "return");
+        return returnMethod
+          ? call(returnMethod, iterator)
+          : createIterResultObject(undefined, true);
       }
-      if (state.inner) try {
-        iteratorClose(state.inner.iterator, 'normal');
-      } catch (error) {
-        return iteratorClose(iterator, 'throw', error);
-      }
-      iteratorClose(iterator, 'normal');
+      if (state.inner)
+        try {
+          iteratorClose(state.inner.iterator, "normal");
+        } catch (error) {
+          return iteratorClose(iterator, "throw", error);
+        }
+      iteratorClose(iterator, "normal");
       return createIterResultObject(undefined, true);
-    }
+    },
   });
 };
 
 var WrapForValidIteratorPrototype = createIteratorProxyPrototype(true);
 var IteratorHelperPrototype = createIteratorProxyPrototype(false);
 
-createNonEnumerableProperty(IteratorHelperPrototype, TO_STRING_TAG, 'Iterator Helper');
+createNonEnumerableProperty(
+  IteratorHelperPrototype,
+  TO_STRING_TAG,
+  "Iterator Helper",
+);
 
 module.exports = function (nextHandler, IS_ITERATOR) {
   var IteratorProxy = function Iterator(record, state) {
@@ -70,7 +80,9 @@ module.exports = function (nextHandler, IS_ITERATOR) {
     setInternalState(this, state);
   };
 
-  IteratorProxy.prototype = IS_ITERATOR ? WrapForValidIteratorPrototype : IteratorHelperPrototype;
+  IteratorProxy.prototype = IS_ITERATOR
+    ? WrapForValidIteratorPrototype
+    : IteratorHelperPrototype;
 
   return IteratorProxy;
 };

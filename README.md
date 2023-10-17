@@ -28,13 +28,6 @@
 
 ## Development
 
-JSDoc meta tags:
-
-- **`@category`:** for grouping methods in the reference section (ad-hoc)
-- **`@stage`:** for indicating the stage of a proposal (0-4)
-- **`@since`:** for indicating the ECMAScript version when the feature is
-  available natively (ES2015-ESNext)
-
 💡 Pro tip: you can run modern Safari (not ancient Safari v5) on Windows using
 [Playwright]'s included WebKit browser:
 

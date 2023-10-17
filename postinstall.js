@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-/* eslint-disable */
+// @ts-check
 const { readFileSync, writeFileSync, statSync } = require("fs");
 const { join } = require("path");
 const { tmpdir } = require("os");
@@ -65,7 +65,7 @@ show_banner: {
 
   let banners;
   try {
-    banners = JSON.parse(readFileSync(cachePath));
+    banners = JSON.parse(readFileSync(cachePath, "utf8"));
   } catch (error) {
     // console.warn(error);
     banners = [];

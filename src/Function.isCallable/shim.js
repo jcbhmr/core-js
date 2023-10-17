@@ -1,5 +1,4 @@
 "use strict";
-
 function isClassConstructor(value) {
   if (!value.prototype) {
     return false;
@@ -10,7 +9,6 @@ function isClassConstructor(value) {
     return false;
   }
 }
-
 /**
  * @param {any} argument
  * @returns {boolean}

@@ -1,22 +1,23 @@
+// @ts-check
 import { rmSync } from "node:fs";
 import { writeFile, readdir } from "node:fs/promises";
 
-let index = `"use strict";\n`;
-for (const file of await readdir("src")) {
-  if (["index.js", "lib"].includes(file)) {
+let js = `"use strict";\n`;
+for (const entry of await readdir("src")) {
+  if (entry === "_lib") {
     continue;
   }
-  const name = file.replace(/\.js$/, "");
-  index += `exports["${name}"] = require("./${name}.js");\n`;
+  js += `exports["${entry}"] = require("./${entry}/shim.js");\n`;
 }
-await writeFile("src/index.js", index);
+// This file is in .gitignore and excluded from tsconfig.json.
+await writeFile("src/_TYPEDOC.js", js);
 process.on("exit", () => {
-  rmSync("src/index.js");
+  rmSync("src/_TYPEDOC.js");
 });
 
 export default {
   out: "out",
-  entryPoints: ["src/index.js"],
+  entryPoints: ["src/_TYPEDOC.js"],
   skipErrorChecking: true,
   plugin: ["typedoc-plugin-mdn-links"],
   navigationLinks: {

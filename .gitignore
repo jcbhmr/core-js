@@ -2,7 +2,7 @@
 **/.vitepress/cache
 **/.vitepress/dist
 
-# https://typedoc.org/ custom '--out' folder
+# Custom combining docs build dir (VitePress + TypeDoc)
 _site
 
 #region https://github.com/github/gitignore/blob/main/Node.gitignore

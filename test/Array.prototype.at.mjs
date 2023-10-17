@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert";
-import ArrayPrototypeAtRaw from "../src/Array.prototype.at.js";
+import ArrayPrototypeAtRaw from "../src/Array.prototype.at/shim.js";
 
 test("metadata", () => {
   assert.equal(ArrayPrototypeAtRaw.length, 1);

@@ -1,6 +1,5 @@
 "use strict";
 var ToIntegerOrInfinity = require("./ToIntegerOrInfinity.js");
-
 /**
  * @param {any} argument
  * @returns {number}

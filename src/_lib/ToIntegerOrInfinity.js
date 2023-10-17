@@ -1,5 +1,4 @@
 "use strict";
-
 /**
  * @param {any} argument
  * @returns {number}

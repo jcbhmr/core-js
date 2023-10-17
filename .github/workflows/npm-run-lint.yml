@@ -11,6 +11,19 @@ on:
       - SECURITY.md
       - .github/**
       - "!.github/workflows/npm-run-lint.yml"
+  pull_request:
+    paths-ignore:
+      - docs/**
+      - README.md
+      - LICENSE
+      - CONTRIBUTING.md
+      - CHANGELOG.md
+      - SECURITY.md
+      - .github/**
+      - "!.github/workflows/npm-run-lint.yml"
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
 jobs:
   npm-run-lint:
     strategy:

@@ -11,5 +11,16 @@
     "strict": false,
     "skipLibCheck": true
   },
-  "include": ["src"]
+  "include": ["src"],
+  "typedocOptions": {
+    "out": "out",
+    "entryPoints": ["src/**"],
+    "skipErrorChecking": true,
+    "plugin": ["typedoc-plugin-mdn-links"],
+    "navigationLinks": {
+      "Guide": "https://corejs.dev/core-js/guide/",
+      "Reference": "https://corejs.dev/core-js/reference/",
+      "GitHub": "https://github.com/corejs-dev/core-js"
+    }
+  }
 }

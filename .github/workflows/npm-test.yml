@@ -9,6 +9,7 @@ on:
       - CONTRIBUTING.md
       - CHANGELOG.md
       - SECURITY.md
+      - CODEOWNERS
       - .github/**
       - "!.github/workflows/npm-test.yml"
   pull_request:
@@ -19,6 +20,7 @@ on:
       - CONTRIBUTING.md
       - CHANGELOG.md
       - SECURITY.md
+      - CODEOWNERS
       - .github/**
       - "!.github/workflows/npm-test.yml"
 concurrency:

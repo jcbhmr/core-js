@@ -12,7 +12,7 @@
     "skipLibCheck": true,
     "strictBindCallApply": true
   },
-  "exclude": ["node_modules", "out", "_site", "docs", ".github"],
+  "exclude": ["node_modules", "out", "_site", "docs", ".github", "**/*.test.{js,mjs,cjs,ts,mts,cts}"],
   "typedocOptions": {
     "out": "out",
     "name": "core-js Reference",

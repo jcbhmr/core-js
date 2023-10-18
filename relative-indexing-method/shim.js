@@ -3,9 +3,13 @@ var ToLength = require("../lib/ToLength.js");
 var ToIntegerOrInfinity = require("../lib/ToIntegerOrInfinity.js");
 /**
  * @template T
- * @type {T[]["at"]}
+ * @this {ArrayLike<T>}
+ * @param {number} index 
+ * @returns {T}
+ * @category ES2022
+ * @see https://github.com/tc39/proposal-relative-indexing-method
  */
-module.exports = function (index) {
+function at(index) {
   // 1. Let O be ? ToObject(this value).
   /** @type {T[]} */
   var O = Object(this);
@@ -36,4 +40,7 @@ module.exports = function (index) {
 
   // 7. Return ? Get(O, ! ToString(𝔽(k))).
   return O[k];
-};
+}
+exports.ArrayPrototypeAt = at;
+exports.TypedArrayPrototypeAt = at;
+exports.StringPrototypeAt = at;

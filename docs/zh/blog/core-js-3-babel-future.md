@@ -220,8 +220,8 @@ polyfill 了。
 一个 issue 里提了 `core-js` 包的很大（ ~2MB ），有很多重复文件。因为这个原
 因，`core-js` 分成了 3 个包：
 
-- [`core-js`](https://www.npmjs.com/package/core-js) 定义全局的 polyfills。（
-  ~500KB，[压缩并且 gzipped 处理后 40KB](https://bundlephobia.com/result?p=core-js@3.0.0-beta.20)
+- [`core-js`](https://www.npmjs.com/package/core-js) 定义全局的 polyfills。
+  （~500KB，[压缩并且 gzipped 处理后 40KB](https://bundlephobia.com/result?p=core-js@3.0.0-beta.20)
   ）
 - [`core-js-pure`](https://www.npmjs.com/package/core-js-pure)，提供了不污染全局
   变量的 polyfills。它和 `core-js@2` 中的 `core-js/library` 相当。（~440KB）
@@ -499,8 +499,7 @@ Babel 7.4 支持注入提案 polyfills。默认，`@babel/preset-env` 不会注�
 
 当使用 `core-js@3` 时，
 [`@babel/transform-runtime`](https://babeljs.io/docs/en/next/babel-plugin-transform-runtime#corejs)
-现在通过 `core-js-pure`（`core-js`的一个版本，不会污染全局变量） 注入
-polyfills。
+现在通过 `core-js-pure`（`core-js`的一个版本，不会污染全局变量） 注入polyfills。
 
 通过将 `@babel/transform-runtime` 设置 `corejs: 3` 选项和创建
 `@babel/runtime-corejs3` 包，已经将 `core-js@3` 和 `@babel/runtime` 集成在一起。

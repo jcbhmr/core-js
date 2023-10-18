@@ -16,7 +16,7 @@
   "typedocOptions": {
     "out": "out",
     "name": "core-js Reference",
-    "readme": "./README.md",
+    "readme": "./typedoc-readme.md",
     "entryPoints": ["*/ponyfill.js"],
     "exclude": [
       "postinstall.js",
@@ -33,7 +33,6 @@
     "skipErrorChecking": true,
     "plugin": [
       "./my-typedoc-plugin.mjs",
-      "typedoc-plugin-remove-empty-namespaces",
       "typedoc-plugin-merge-modules",
       "typedoc-plugin-not-exported",
       "typedoc-plugin-mdn-links"

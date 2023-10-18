@@ -6,7 +6,7 @@ module.exports = (async () => {
   return [
     // https://eslint.org/docs/latest/use/configure/configuration-files-new#using-configurations-included-in-plugins
     // https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
-    ...compat.extends("plugin:es5/no-es2015").map((config) => ({
+    ...compat.extends("plugin:es/restrict-to-es5").map((config) => ({
       ignores: [
         "postinstall.js",
         "eslint.config.js",

@@ -1,4 +1,4 @@
-import { Converter } from "typedoc";
+import { Converter, ReflectionKind } from "typedoc";
 
 /** @param {Readonly<import("typedoc").Application>} app */
 export function load(app) {
@@ -6,7 +6,7 @@ export function load(app) {
    * @param {import("typedoc").Context} context
    * @param {import("typedoc").DeclarationReflection} reflection
    */
-  function handleCreateDeclaration(context, reflection) {
+  function handleCreateDeclaration1(context, reflection) {
     if (reflection.name !== "default" && reflection.name !== "export=") {
       return;
     }
@@ -40,5 +40,21 @@ export function load(app) {
     }
   }
 
-  app.converter.on(Converter.EVENT_CREATE_DECLARATION, handleCreateDeclaration);
+  /**
+   * @param {import("typedoc").Context} context
+   * @param {import("typedoc").DeclarationReflection} reflection
+   */
+  function handleCreateDeclaration2(context, reflection) {
+    if (reflection.kind === ReflectionKind.Namespace && !reflection.children) {
+      // console.debug(reflection)
+      context.project.removeReflection(reflection);
+    }
+  }
+
+  app.converter.on(Converter.EVENT_CREATE_DECLARATION, function () {
+    // @ts-ignore
+    handleCreateDeclaration1.apply(this, arguments);
+    // @ts-ignore
+    handleCreateDeclaration2.apply(this, /** @type {any} */ arguments);
+  });
 }

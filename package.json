@@ -72,13 +72,14 @@
   "prettier": {
     "plugins": [
       "prettier-plugin-jsdoc"
-    ]
+    ],
+    "proseWrap": "always"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^2.1.2",
     "@types/node": "^20.8.6",
     "eslint": "^8.51.0",
-    "eslint-plugin-es5": "^1.5.0",
+    "eslint-plugin-es": "^4.1.0",
     "eslint-plugin-regexp": "^2.0.0",
     "prettier": "^3.0.3",
     "prettier-plugin-jsdoc": "^1.1.1",
@@ -86,7 +87,6 @@
     "typedoc-plugin-mdn-links": "^3.1.0",
     "typedoc-plugin-merge-modules": "^5.1.0",
     "typedoc-plugin-not-exported": "^0.1.6",
-    "typedoc-plugin-remove-empty-namespaces": "gist:27509886f564354dcdaf4922a523aecd",
     "typescript": "^5.2.2",
     "vitepress": "^1.0.0-rc.22",
     "vitest": "^0.34.6",

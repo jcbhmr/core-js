@@ -2,3 +2,4 @@
 if (!Array.prototype.at) {
   Array.prototype.at = require("./shim.js");
 }
+module.exports = {};

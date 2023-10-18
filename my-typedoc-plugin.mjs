@@ -1,12 +1,10 @@
 // @ts-check
 import { Converter, ReflectionKind } from "typedoc";
-/**
- * @param {Readonly<import('typedoc').Application>} app
- */
+/** @param {Readonly<import("typedoc").Application>} app */
 export function load(app) {
   /**
-   * @param {import('typedoc').Context} context
-   * @param {import('typedoc').DeclarationReflection} reflection
+   * @param {import("typedoc").Context} context
+   * @param {import("typedoc").DeclarationReflection} reflection
    */
   function handleDeclaration(context, reflection) {
     // By default TypeDoc generates a lot of 'export=' empty modules

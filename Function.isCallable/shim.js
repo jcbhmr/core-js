@@ -1,4 +1,5 @@
 "use strict";
+/** @module Function.isCallable */
 function isClassConstructor(value) {
   if (!value.prototype) {
     return false;

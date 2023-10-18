@@ -6,6 +6,7 @@ const { tmpdir } = require("os");
 
 /**
  * Based on the 'ci-info' package which powers 'is-ci'.
+ *
  * @see https://github.com/watson/ci-info/blob/54e74d014ebed90aa5684c9812d8e14f49c194b0/index.js#L56-L69
  */
 const isCI = !!(

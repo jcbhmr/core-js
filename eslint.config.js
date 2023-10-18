@@ -1,6 +1,6 @@
 "use strict";
 // https://eslint.org/docs/latest/use/configure/configuration-files-new
-/** @type {import('eslint').Linter.FlatConfig} */
+/** @type {import("eslint").Linter.FlatConfig} */
 module.exports = (async () => {
   const regexp = await import("eslint-plugin-regexp");
   return [

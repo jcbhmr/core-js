@@ -1,7 +1,10 @@
 "use strict";
-var ToLength = require("../../lib/ToLength.js");
-var ToIntegerOrInfinity = require("../../lib/ToIntegerOrInfinity.js");
-/** @type {Array["at"]} */
+var ToLength = require("../lib/ToLength.js");
+var ToIntegerOrInfinity = require("../lib/ToIntegerOrInfinity.js");
+/**
+ * @template T
+ * @type {T[]["at"]}
+ */
 module.exports = function (index) {
   // 1. Let O be ? ToObject(this value).
   /** @type {T[]} */

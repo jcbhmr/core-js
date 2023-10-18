@@ -1,3 +1,5 @@
+# Things that aren't in '.gitignore' but SHOULD be ignored
+# when publishing to npm:
 .github
 docs
 CODEOWNERS
@@ -9,6 +11,7 @@ tsconfig.json
 *.test.{js,mjs,cjs}
 *.ts
 
+# KEEP THIS IN SYNC WITH '.gitignore'!
 # https://vitepress.dev/
 **/.vitepress/cache
 **/.vitepress/dist

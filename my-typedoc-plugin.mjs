@@ -1,21 +1,44 @@
-// @ts-check
-import { Converter, ReflectionKind } from "typedoc";
+import { Converter } from "typedoc";
+
 /** @param {Readonly<import("typedoc").Application>} app */
 export function load(app) {
   /**
    * @param {import("typedoc").Context} context
    * @param {import("typedoc").DeclarationReflection} reflection
    */
-  function handleDeclaration(context, reflection) {
-    // By default TypeDoc generates a lot of 'export=' empty modules
+  function handleCreateDeclaration(context, reflection) {
+    if (reflection.name !== "default" && reflection.name !== "export=") {
+      return;
+    }
+
+    // reflection.escapedName is the cheapest option
     if (
-      reflection.name === "export=" &&
-      reflection.kind === ReflectionKind.Namespace &&
-      !reflection.children
+      reflection.escapedName &&
+      reflection.escapedName !== "default" &&
+      reflection.escapedName !== "export="
     ) {
-      // console.debug(reflection)
-      context.project.removeReflection(reflection);
+      reflection.name = reflection.escapedName;
+      return;
+    }
+
+    // if that does not work, try harder
+    const symbol = context.project.getSymbolFromReflection(reflection);
+    if (symbol && symbol.declarations && symbol.declarations[0]) {
+      /** @type {any} */
+      const node = symbol.declarations[0];
+      if (node && node.name) {
+        reflection.name = node.name.getText();
+        return;
+      }
+    }
+
+    // Finally, fallback to the file name
+    if (reflection.parent && reflection.parent.name) {
+      // Removes the folder name
+      const name = reflection.parent.name.split("/").at(-2);
+      reflection.name = name;
     }
   }
-  app.converter.on(Converter.EVENT_CREATE_DECLARATION, handleDeclaration);
+
+  app.converter.on(Converter.EVENT_CREATE_DECLARATION, handleCreateDeclaration);
 }

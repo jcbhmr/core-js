@@ -1,4 +1,3 @@
-/** @module Function.isCallable */
 declare global {
   interface FunctionConstructor {
     /**

@@ -1,2 +1,2 @@
-"use strict"
-module.exports = require("./polyfill.js")
+"use strict";
+module.exports = require("./polyfill.js");

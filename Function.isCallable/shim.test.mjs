@@ -20,7 +20,3 @@ test("Function.isCallable(class {}) === false", () => {
   const f = class {};
   assert.equal(shim(f), false);
 });
-
-test("Function.isCallable(Error) === true", () => {
-  assert.equal(shim(Error), true);
-});

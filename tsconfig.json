@@ -3,7 +3,6 @@
     "noEmit": true,
     "allowJs": true,
     "checkJs": true,
-    // Syntax targetting is handled by ESLint
     "target": "ESNext",
     "lib": [],
     "module": "NodeNext",
@@ -16,16 +15,29 @@
   "exclude": ["node_modules", "out", "_site", "docs", ".github"],
   "typedocOptions": {
     "out": "out",
+    "name": "core-js Reference",
+    "readme": "./README.md",
     "entryPoints": ["*/ponyfill.js"],
+    "exclude": [
+      "postinstall.js",
+      "eslint.config.js",
+      "my-typedoc-plugin.mjs",
+      "**/*.mjs",
+      "**/*.test.{js,mjs,cjs}",
+      "node_modules/**",
+      "out/**",
+      "_site/**",
+      "docs/**",
+      ".github/**"
+    ],
     "skipErrorChecking": true,
     "plugin": [
       "./my-typedoc-plugin.mjs",
-      // "typedoc-plugin-merge-modules",
+      "typedoc-plugin-remove-empty-namespaces",
+      "typedoc-plugin-merge-modules",
       "typedoc-plugin-not-exported",
-      "typedoc-plugin-mdn-links",
-      // "typedoc-theme-hierarchy",
+      "typedoc-plugin-mdn-links"
     ],
-    // "theme": "hierarchy",
     "navigationLinks": {
       "Guide": "https://corejs.dev/core-js/guide/",
       "Reference": "https://corejs.dev/core-js/reference/",

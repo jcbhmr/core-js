@@ -1,17 +1,38 @@
 "use strict";
 // https://eslint.org/docs/latest/use/configure/configuration-files-new
-/** @type {import("eslint").Linter.FlatConfig} */
 module.exports = (async () => {
-  const regexp = await import("eslint-plugin-regexp");
+  const { FlatCompat } = await import("@eslint/eslintrc");
+  const compat = new FlatCompat({ baseDirectory: __dirname });
   return [
     // https://eslint.org/docs/latest/use/configure/configuration-files-new#using-configurations-included-in-plugins
-    regexp.configs["regexp/recommended"],
+    // https://eslint.org/docs/latest/use/configure/migration-guide#using-eslintrc-configs-in-flat-config
+    ...compat.extends("plugin:es5/no-es2015").map((config) => ({
+      ignores: [
+        "postinstall.js",
+        "eslint.config.js",
+        "my-typedoc-plugin.mjs",
+        "**/*.mjs",
+        "**/*.test.{js,mjs,cjs}",
+      ],
+      ...config,
+    })),
+    ...compat.extends("plugin:regexp/recommended").map((config) => ({
+      ignores: [
+        "postinstall.js",
+        "eslint.config.js",
+        "my-typedoc-plugin.mjs",
+        "**/*.test.{js,mjs,cjs}",
+      ],
+      ...config,
+    })),
     {
-      files: ["*/**/*.js", "postinstall.js"],
-      languageOptions: {
-        ecmaVersion: 3,
-        sourceType: "commonjs",
-      },
+      ignores: [
+        "node_modules/**",
+        "out/**",
+        "_site/**",
+        "docs/**",
+        ".github/**",
+      ],
     },
   ];
 })();

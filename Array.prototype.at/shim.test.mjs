@@ -1,9 +1,9 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import shim from "../../src/Array.prototype.at/shim.js";
+import shim from "./shim.js";
 
 test("Array.prototype.at.length === 1", () => {
-  assert.equal(Array.prototype.at.length, 1)
+  assert.equal(Array.prototype.at.length, 1);
   assert.equal(shim.length, 1);
 });
 

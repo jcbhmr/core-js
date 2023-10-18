@@ -11,16 +11,15 @@
     "strict": false,
     "skipLibCheck": true
   },
-  "include": ["src"],
+  "exclude": ["docs", ".github", "node_modules"],
   "typedocOptions": {
     "out": "out",
-    "entryPoints": ["src/*/shim.js"],
+    "entryPointStrategy": "expand",
+    "entryPoints": ["."],
+    "exclude": ["docs/**", ".github/**", "node_modules/**", "lib/**"],
     "skipErrorChecking": true,
-    "plugin": [
-      "typedoc-plugin-mdn-links",
-      "./my-typedoc-plugin.mjs",
-      "typedoc-plugin-merge-modules",
-    ],
+    "plugin": ["typedoc-plugin-mdn-links", "typedoc-theme-hierarchy", "./my-typedoc-plugin.mjs"],
+    "theme": "hierarchy",
     "navigationLinks": {
       "Guide": "https://corejs.dev/core-js/guide/",
       "Reference": "https://corejs.dev/core-js/reference/",

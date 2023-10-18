@@ -1,6 +1,6 @@
 "use strict";
-var ToLength = require("../_lib/ToLength.js");
-var ToIntegerOrInfinity = require("../_lib/ToIntegerOrInfinity.js");
+var ToLength = require("../../lib/ToLength.js");
+var ToIntegerOrInfinity = require("../../lib/ToIntegerOrInfinity.js");
 /**
  * @template T
  * @this {T[]}

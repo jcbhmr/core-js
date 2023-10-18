@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert";
-import shim from "../../src/Function.isCallable/shim.js";
+import shim from "./shim.js";
 
 test("Function.isCallable.length === 1", () => {
   assert.equal(shim.length, 1);

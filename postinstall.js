@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// @ts-check
+"use strict";
 const { readFileSync, writeFileSync, statSync } = require("fs");
 const { join } = require("path");
 const { tmpdir } = require("os");

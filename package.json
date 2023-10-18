@@ -1,7 +1,7 @@
 {
   "name": "core-js",
   "version": "4.0.0",
-  "type": "commonjs",
+  "private": true,
   "keywords": [
     "ES3",
     "ES5",
@@ -48,18 +48,33 @@
     "ponyfill",
     "shim"
   ],
-  "main": "",
+  "type": "commonjs",
   "exports": null,
+  "main": "",
   "files": [],
-  "private": true,
   "scripts": {
-    "postinstall": "node postinstall.js",
-    "test": "node --test",
     "build": "node build.mjs",
     "build:docs": "vitepress build docs --outDir _site && typedoc --out _site/reference",
     "docs:dev": "vitepress dev docs",
     "format": "prettier -w .",
-    "lint": "tsc --noEmit && eslint src"
+    "postinstall": "node postinstall.js",
+    "lint": "tsc --noEmit && eslint src",
+    "test": "node --test"
+  },
+  "eslintConfig": {
+    "env": {
+      "commonjs": true
+    },
+    "plugins": [
+      "es5"
+    ],
+    "extends": [
+      "eslint:recommended",
+      "plugin:es5/no-es2015"
+    ]
+  },
+  "dependencies": {
+    "dom-parser": "^0.1.6"
   },
   "devDependencies": {
     "@types/node": "^20.8.6",
@@ -74,20 +89,5 @@
     "vitepress": "^1.0.0-rc.22",
     "vitest": "^0.34.6",
     "vue": "^3.3.4"
-  },
-  "eslintConfig": {
-    "plugins": [
-      "es5"
-    ],
-    "extends": [
-      "eslint:recommended",
-      "plugin:es5/no-es2015"
-    ],
-    "env": {
-      "commonjs": true
-    }
-  },
-  "dependencies": {
-    "dom-parser": "^0.1.6"
   }
 }

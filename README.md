@@ -17,7 +17,6 @@
 🚀 Use tomorrow's JavaScript functions **today**! \
 🧓 Great for polyfilling old browsers \
 🌟 Integrates well with [Babel] and [SWC] \
-🌐 Works with Internet Explorer 11 \
 📦 Modular: use only what you need \
 🦄 Has pure [ponyfill] imports \
 📖 Well documented 🆕

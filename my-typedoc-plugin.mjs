@@ -9,10 +9,14 @@ export function load(app) {
    * @param {import('typedoc').DeclarationReflection} reflection
    */
   function handleDeclaration(context, reflection) {
-    // REMOVES all the namespace fluff that comes from being 'module.exports = {}'.
-    // We just care about the functions, objects, strings, etc; not the namespace object.
-    if (reflection.name === "export=" && reflection.kind === ReflectionKind.Namespace && !reflection.children) {
-        context.project.removeReflection(reflection);
+    // By default TypeDoc generates a lot of 'export=' empty modules
+    if (
+      reflection.name === "export=" &&
+      reflection.kind === ReflectionKind.Namespace &&
+      !reflection.children
+    ) {
+      // console.debug(reflection)
+      context.project.removeReflection(reflection);
     }
   }
   app.converter.on(Converter.EVENT_CREATE_DECLARATION, handleDeclaration);

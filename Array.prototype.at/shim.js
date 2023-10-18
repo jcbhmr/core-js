@@ -1,15 +1,7 @@
 "use strict";
 var ToLength = require("../../lib/ToLength.js");
 var ToIntegerOrInfinity = require("../../lib/ToIntegerOrInfinity.js");
-/**
- * @template T
- * @this {T[]}
- * @param {number} index
- * @returns {T | undefined}
- * @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/at
- * @see https://tc39.es/ecma262/multipage/indexed-collections.html#sec-array.prototype.at
- * @category ES2022
- */
+/** @type {Array["at"]} */
 module.exports = function (index) {
   // 1. Let O be ? ToObject(this value).
   /** @type {T[]} */

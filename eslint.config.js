@@ -3,7 +3,6 @@
 /** @type {import('eslint').Linter.FlatConfig} */
 module.exports = (async () => {
   const regexp = await import("eslint-plugin-regexp");
-
   return [
     // https://eslint.org/docs/latest/use/configure/configuration-files-new#using-configurations-included-in-plugins
     regexp.configs["regexp/recommended"],

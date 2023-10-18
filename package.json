@@ -29,6 +29,7 @@
     "ECMAScript 2021",
     "ECMAScript 2022",
     "ECMAScript 2023",
+    "ESNext",
     "Map",
     "Set",
     "WeakMap",
@@ -49,9 +50,7 @@
     "shim"
   ],
   "type": "commonjs",
-  "files": ["*/", "postinstall.js", "!.github", "!docs"],
   "scripts": {
-    "build": "node build.mjs",
     "build:docs": "vitepress build docs --outDir _site && typedoc --out _site/reference",
     "docs:dev": "vitepress dev docs",
     "format": "prettier -w .",

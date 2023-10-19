@@ -1,3 +1,5 @@
-/** @ignore @module */
 "use strict";
-Array.prototype.at ||= require("./shim.js");
+/** @returns {<T>(this: T[], index: number) => T | undefined} */
+module.exports = function () {
+    return Array.prototype.at || require("./implementation.js")
+}

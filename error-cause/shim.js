@@ -2,7 +2,9 @@
 module.exports = function () {
     var getPolyfill = require("./polyfill.js")
     var polyfill = getPolyfill()
-    if (polyfill !== Array.prototype.at) {
-        Array.prototype.at = polyfill
+    if (polyfill !== Error) {
+        // @ts-ignore
+        Error = polyfill
+        Error.prototype.constructor = Error
     }
 }

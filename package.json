@@ -2,6 +2,12 @@
   "name": "core-js",
   "version": "4.0.0",
   "private": true,
+  "exports": {
+    "./*": [
+      "./*",
+      "./*.js"
+    ]
+  },
   "keywords": [
     "ES3",
     "ES5",
@@ -50,16 +56,6 @@
     "shim"
   ],
   "type": "commonjs",
-  "files": [
-    "**/*.js",
-    "!eslint.config.js",
-    "!.github",
-    "!docs",
-    "!_site",
-    "!out",
-    "!**/*.test.{js,mjs,cjs}",
-    "!**/*.d.{ts,mts,cts}"
-  ],
   "scripts": {
     "build:docs": "vitepress build docs --outDir _site && typedoc --out _site/reference",
     "docs:dev": "vitepress dev docs",
@@ -87,6 +83,7 @@
     "typedoc-plugin-extras": "^3.0.0",
     "typedoc-plugin-mdn-links": "^3.1.0",
     "typedoc-plugin-merge-modules": "^5.1.0",
+    "typedoc-plugin-rename-defaults": "^0.6.7",
     "typedoc-theme-hierarchy": "^4.1.2",
     "typescript": "^5.2.2",
     "vitepress": "^1.0.0-rc.22",

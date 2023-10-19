@@ -1,9 +1,5 @@
-# https://vitepress.dev/
-**/.vitepress/cache
-**/.vitepress/dist
-
-# Custom combining docs build dir (VitePress + TypeDoc)
-_site
+# https://typedoc.org/
+docs
 
 #region https://github.com/github/gitignore/blob/main/Node.gitignore
 # Logs

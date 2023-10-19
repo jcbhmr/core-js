@@ -19,7 +19,8 @@
 🌟 Integrates well with [Babel] and [SWC] \
 📦 Modular: use only what you need \
 🦄 Has pure [ponyfill] imports \
-📖 Well documented 🆕
+[📖 Well documented 🆕](https://corejs.dev/) \
+✅ Written in maximally compatible ES5 \
 
 ## Installation
 

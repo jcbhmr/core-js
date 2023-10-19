@@ -30,10 +30,10 @@ namespace uncurryThis {
   export type UncurryGetter<O, K extends keyof O, T = O> = (self: T) => O[K];
   export type UncurrySetter<O, K extends keyof O, T = O> = (
     self: T,
-    value: O[K],
+    value: O[K]
   ) => void;
 }
 function uncurryThis<T extends (...args: any[]) => any>(
-  fn: T,
+  fn: T
 ): uncurryThis.UncurryThis<T>;
 export = uncurryThis;

@@ -53,7 +53,6 @@
   "files": [
     "**/*.js",
     "!eslint.config.js",
-    "!my-typedoc-plugin.mjs",
     "!.github",
     "!docs",
     "!_site",
@@ -73,7 +72,8 @@
     "plugins": [
       "prettier-plugin-jsdoc"
     ],
-    "proseWrap": "always"
+    "proseWrap": "always",
+    "trailingComma": "es5"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^2.1.2",
@@ -84,9 +84,10 @@
     "prettier": "^3.0.3",
     "prettier-plugin-jsdoc": "^1.1.1",
     "typedoc": "^0.25.2",
+    "typedoc-plugin-extras": "^3.0.0",
     "typedoc-plugin-mdn-links": "^3.1.0",
     "typedoc-plugin-merge-modules": "^5.1.0",
-    "typedoc-plugin-not-exported": "^0.1.6",
+    "typedoc-theme-hierarchy": "^4.1.2",
     "typescript": "^5.2.2",
     "vitepress": "^1.0.0-rc.22",
     "vitest": "^0.34.6",

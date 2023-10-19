@@ -1,6 +1,7 @@
 #!/usr/bin/env node
-"use strict";
+/* eslint-disable */
 // Node.js v6.4.0+ supports ES2015
+"use strict";
 const { readFileSync, writeFileSync, statSync } = require("fs");
 const { join } = require("path");
 const { tmpdir } = require("os");

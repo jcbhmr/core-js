@@ -1,13 +1,11 @@
+/** @ignore @module */
 "use strict";
 var ToLength = require("../lib/ToLength.js");
 var ToIntegerOrInfinity = require("../lib/ToIntegerOrInfinity.js");
 /**
  * @template T
+ * @param {number} index
  * @this {ArrayLike<T>}
- * @param {number} index 
- * @returns {T}
- * @category ES2022
- * @see https://github.com/tc39/proposal-relative-indexing-method
  */
 function at(index) {
   // 1. Let O be ? ToObject(this value).

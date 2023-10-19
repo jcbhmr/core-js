@@ -3,7 +3,7 @@
     "noEmit": true,
     "allowJs": true,
     "checkJs": true,
-    "target": "ESNext",
+    "target": "ES5",
     "lib": [],
     "module": "NodeNext",
     "moduleResolution": "NodeNext",
@@ -12,35 +12,47 @@
     "skipLibCheck": true,
     "strictBindCallApply": true
   },
-  "exclude": ["node_modules", "out", "_site", "docs", ".github", "**/*.test.{js,mjs,cjs,ts,mts,cts}"],
+  "exclude": [
+    "node_modules",
+    "out",
+    "_site",
+    "docs",
+    ".github",
+    "**/*.test.js",
+    "**/*.test.mjs",
+    "**/*.test.cjs",
+    "**/*.test.ts",
+    "**/*.test.mts",
+    "**/*.test.cts"
+  ],
   "typedocOptions": {
     "out": "out",
     "name": "core-js Reference",
-    "readme": "./typedoc-readme.md",
-    "entryPoints": ["*/ponyfill.js"],
+    "readme": "none",
+    "entryPoints": ["./**/*.{js,mjs,cjs,ts,mts,cts}"],
     "exclude": [
       "postinstall.js",
       "eslint.config.js",
-      "my-typedoc-plugin.mjs",
-      "**/*.mjs",
-      "**/*.test.{js,mjs,cjs}",
+      "**/*.test.{js,mjs,cjs,ts,mts,cts}",
       "node_modules/**",
       "out/**",
       "_site/**",
       "docs/**",
-      ".github/**"
+      ".github/**",
+      "lib/**"
     ],
     "skipErrorChecking": true,
     "plugin": [
-      "./my-typedoc-plugin.mjs",
-      "typedoc-plugin-merge-modules",
-      "typedoc-plugin-not-exported",
-      "typedoc-plugin-mdn-links"
+      "typedoc-plugin-mdn-links",
+      "typedoc-plugin-extras",
+      "typedoc-plugin-merge-modules"
     ],
+    "mergeModulesMergeMode": "module",
     "navigationLinks": {
       "Guide": "https://corejs.dev/core-js/guide/",
       "Reference": "https://corejs.dev/core-js/reference/",
       "GitHub": "https://github.com/corejs-dev/core-js"
-    }
+    },
+    "favicon": "https://fav.farm/🟨"
   }
 }

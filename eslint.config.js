@@ -16,7 +16,7 @@ module.exports = (async () => {
         "_site/**",
         "docs/**",
         ".github/**",
-        "**/*.test.{js,mjs,cjs}",
+        "**/*.test.{js,mjs,cjs,ts,mts,cts}",
       ],
     },
   ];

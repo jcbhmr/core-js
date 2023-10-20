@@ -1,5 +1,5 @@
-"use strict"
+"use strict";
 module.exports = function () {
-    require("./array.at/shim.js")()
-    require("./error-cause/shim.js")()
-}
+  require("./array.at/shim.js")();
+  require("./error-cause/shim.js")();
+};

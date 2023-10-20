@@ -3,10 +3,10 @@
 var ToLength = require("../lib/ToLength.js");
 var ToIntegerOrInfinity = require("../lib/ToIntegerOrInfinity.js");
 /**
- * @name Array.prototype.at
  * @template T
- * @this {ArrayLike<T>}
  * @param {number} index
+ * @name Array.prototype.at
+ * @this {ArrayLike<T>}
  */
 module.exports = function at(index) {
   // 1. Let O be ? ToObject(this value).

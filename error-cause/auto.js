@@ -1,3 +1,3 @@
-"use strict"
-var shim = require("./shim.js")
-shim()
+"use strict";
+var shim = require("./shim.js");
+shim();

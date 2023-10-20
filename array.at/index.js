@@ -1,3 +1,3 @@
-"use strict"
-var getPolyfill = require("./polyfill.js")
-module.exports = getPolyfill()
+"use strict";
+var getPolyfill = require("./polyfill.js");
+module.exports = getPolyfill();

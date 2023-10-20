@@ -3,14 +3,10 @@
 // Node.js v6.4.0+ supports ES2015
 "use strict";
 const { readFileSync, writeFileSync, statSync } = require("fs");
-const { join } = require("path");
+const { join, dirname } = require("path");
 const { tmpdir } = require("os");
 
-/**
- * Based on the 'ci-info' package which powers 'is-ci'.
- *
- * @see https://github.com/watson/ci-info/blob/54e74d014ebed90aa5684c9812d8e14f49c194b0/index.js#L56-L69
- */
+/** @see https://github.com/watson/ci-info/blob/54e74d014ebed90aa5684c9812d8e14f49c194b0/index.js#L56-L69 */
 const isCI = !!(
   process.env.CI !== "false" && // Bypass all checks if CI env is explicitly set to 'false'
   (process.env.BUILD_ID || // Jenkins, Cloudbees
@@ -44,6 +40,13 @@ ${teal("I highly recommend reading this: ")}${blue("https://github.com/zloirock/
 `;
 
 show_banner: {
+  if (
+    process.env.npm_package_json &&
+    dirname(process.env.npm_package_json) === __dirname
+  ) {
+    break show_banner;
+  }
+
   if (
     isCI ||
     parseBoolean(process.env.ADBLOCK) ||
